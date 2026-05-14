@@ -31,23 +31,29 @@ type Event = {
 export default function CleanupMap() {
   const [events, setEvents] = useState<Event[]>([])
   const [userId, setUserId] = useState<string | null>(null)
+  const [rsvps, setRsvps] = useState<string[]>([])
 
   useEffect(() => {
     const load = async () => {
-      // get user
       const {
         data: { user },
       } = await supabase.auth.getUser()
 
       setUserId(user?.id ?? null)
 
-      // fetch events
-      const { data, error } = await supabase
+      const { data: eventsData } = await supabase
         .from('cleanup_events')
         .select('*')
 
-      if (!error && data) {
-        setEvents(data)
+      setEvents(eventsData ?? [])
+
+      if (user) {
+        const { data: rsvpData } = await supabase
+          .from('event_rsvps')
+          .select('event_id')
+          .eq('user_id', user.id)
+
+        setRsvps(rsvpData?.map((r) => r.event_id) ?? [])
       }
     }
 
@@ -68,6 +74,32 @@ export default function CleanupMap() {
     }
   }
 
+  const toggleRsvp = async (eventId: string) => {
+    if (!userId) {
+      alert('You must be logged in')
+      return
+    }
+
+    const isGoing = rsvps.includes(eventId)
+
+    if (isGoing) {
+      await supabase
+        .from('event_rsvps')
+        .delete()
+        .eq('event_id', eventId)
+        .eq('user_id', userId)
+
+      setRsvps((prev) => prev.filter((id) => id !== eventId))
+    } else {
+      await supabase.from('event_rsvps').insert({
+        event_id: eventId,
+        user_id: userId,
+      })
+
+      setRsvps((prev) => [...prev, eventId])
+    }
+  }
+
   return (
     <MapContainer
       center={[-34.9285, 138.6007]}
@@ -85,17 +117,26 @@ export default function CleanupMap() {
           position={[event.latitude, event.longitude]}
         >
           <Popup>
-            <div className="space-y-1">
-              <strong>{event.title}</strong>
-              <p>{event.description}</p>
-              <p className="text-xs text-gray-500">
-                {event.location_name}
-              </p>
+            <div className="space-y-2">
+              <div>
+                <strong>{event.title}</strong>
+                <p className="text-sm">{event.description}</p>
+                <p className="text-xs text-gray-500">
+                  {event.location_name}
+                </p>
+              </div>
+
+              <button
+                onClick={() => toggleRsvp(event.id)}
+                className="text-blue-600 text-sm"
+              >
+                {rsvps.includes(event.id) ? 'Cancel RSVP' : 'RSVP'}
+              </button>
 
               {userId === event.creator_id && (
                 <button
                   onClick={() => deleteEvent(event.id)}
-                  className="text-red-600 text-sm"
+                  className="text-red-600 text-sm block"
                 >
                   Delete
                 </button>
