@@ -3,10 +3,13 @@
 import { useState } from 'react'
 import dynamic from 'next/dynamic'
 import { supabase } from '@/lib/supabase'
+import { useRouter } from 'next/navigation'
 
 const CreateMap = dynamic(() => import('@/components/map/CreateMap'), {
   ssr: false,
 })
+
+const router = useRouter()
 
 export default function CreatePage() {
   const [title, setTitle] = useState('')
@@ -36,7 +39,7 @@ export default function CreatePage() {
       } = await supabase.auth.getUser()
 
       if (userError || !user) {
-        alert('You must be logged in to create events')
+        router.push('/login')
         setLoading(false)
         return
       }
