@@ -37,7 +37,7 @@ export default function EventPage() {
       } = await supabase.auth.getUser()
 
       setUserId(user?.id ?? null)
-      
+
       const { data: eventData } = await supabase
         .from('cleanup_events')
         .select('*')
@@ -115,7 +115,7 @@ export default function EventPage() {
             </p>
 
             <p className="text-sm text-gray-500 mt-2">
-              📍 {event.location_name}
+              Location: {event.location_name}
             </p>
           </div>
 

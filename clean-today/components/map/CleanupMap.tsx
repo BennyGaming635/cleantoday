@@ -152,7 +152,7 @@ export default function CleanupMap() {
                 onClick={() => router.push(`/event/${event.id}`)}
                 className="text-green-600 text-sm block underline"
               >
-                View full event →
+                View Details
               </button>
             </div>
           </Popup>
