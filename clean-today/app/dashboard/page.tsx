@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Navbar from '@/components/navbar/Navbar'
 import { supabase } from '@/lib/supabase'
 import type { User } from '@supabase/supabase-js'
 
@@ -9,8 +10,6 @@ type Event = {
   title: string
   description: string
   location_name: string
-  latitude: number
-  longitude: number
   creator_id: string
 }
 
@@ -35,6 +34,7 @@ export default function Dashboard() {
       }
 
       setUser(user)
+
       const { data: eventsData } = await supabase
         .from('cleanup_events')
         .select('*')
@@ -75,55 +75,67 @@ export default function Dashboard() {
     }
   }
 
-  if (loading) {
-    return <div className="p-6">Loading...</div>
-  }
-
-  if (!user) {
-    return (
-      <div className="p-6">
-        Please log in to view your dashboard.
-      </div>
-    )
-  }
-
   return (
-    <div className="p-6 space-y-4">
-      <h1 className="text-2xl font-bold">My Events</h1>
+    <div className="min-h-screen flex flex-col bg-gray-50">
+      <Navbar />
 
-      {events.length === 0 ? (
-        <p>No events created yet.</p>
-      ) : (
-        <div className="grid gap-4">
-          {events.map((event) => (
-            <div
-              key={event.id}
-              className="border p-4 rounded-lg space-y-2"
-            >
-              <h2 className="font-bold text-lg">
-                {event.title}
-              </h2>
+      <div className="flex-1 p-6">
+        <div className="max-w-5xl mx-auto space-y-6">
+          <div>
+            <h1 className="text-3xl font-bold text-green-700">
+              My Events
+            </h1>
+            <p className="text-gray-500 mt-1">
+              Manage and track your cleanup events
+            </p>
+          </div>
 
-              <p>{event.description}</p>
+          {loading && (
+            <div className="text-gray-500">Loading events...</div>
+          )}
 
-              <p className="text-sm text-gray-500">
-                {event.location_name}
-              </p>
-
-              <p className="text-sm text-blue-600">
-                RSVPs: {rsvpCounts[event.id] || 0}
-              </p>
-
-              <button
-                onClick={() => deleteEvent(event.id)}
-                className="text-red-600 text-sm"
-              >
-                Delete
-              </button>
+          {!loading && events.length === 0 && (
+            <div className="bg-white p-6 rounded-xl shadow text-gray-500">
+              You haven’t created any events yet.
             </div>
-          ))}
+          )}
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {events.map((event) => (
+              <div
+                key={event.id}
+                className="bg-white rounded-xl shadow p-5 space-y-3 hover:shadow-md transition"
+              >
+                <div>
+                  <h2 className="text-xl font-semibold text-gray-800">
+                    {event.title}
+                  </h2>
+                  <p className="text-gray-600 text-sm mt-1">
+                    {event.description}
+                  </p>
+                </div>
+
+                <div className="text-sm text-gray-500">
+                  📍 {event.location_name}
+                </div>
+
+                <div className="flex justify-between items-center pt-2">
+                  <div className="text-blue-600 text-sm font-medium">
+                    RSVPs: {rsvpCounts[event.id] || 0}
+                  </div>
+
+                  <button
+                    onClick={() => deleteEvent(event.id)}
+                    className="text-red-600 text-sm hover:underline"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-      )}
+      </div>
     </div>
   )
 }
