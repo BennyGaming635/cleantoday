@@ -17,28 +17,54 @@ export default function CreatePage() {
   const [loading, setLoading] = useState(false)
 
   const createEvent = async () => {
-    if (!coords) return alert('Select a location on the map')
+    if (!title || !description || !locationName) {
+      alert('Please fill in all fields')
+      return
+    }
+
+    if (!coords) {
+      alert('Select a location on the map')
+      return
+    }
 
     setLoading(true)
 
-    const { error } = await supabase.from('cleanup_events').insert({
-      title,
-      description,
-      location_name: locationName,
-      latitude: coords.lat,
-      longitude: coords.lng,
-    })
+    try {
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser()
 
-    setLoading(false)
+      if (userError || !user) {
+        alert('You must be logged in to create events')
+        setLoading(false)
+        return
+      }
 
-    if (error) {
-      alert(error.message)
-    } else {
+      const { error } = await supabase.from('cleanup_events').insert({
+        title,
+        description,
+        location_name: locationName,
+        latitude: coords.lat,
+        longitude: coords.lng,
+        creator_id: user.id,
+      })
+
+      if (error) {
+        alert(error.message)
+        return
+      }
+
       alert('Event created')
+
       setTitle('')
       setDescription('')
       setLocationName('')
       setCoords(null)
+    } catch {
+      alert('Unexpected error creating event')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -69,10 +95,10 @@ export default function CreatePage() {
         />
 
         <p>
-          Selected:{" "}
+          Selected:{' '}
           {coords
             ? `${coords.lat.toFixed(5)}, ${coords.lng.toFixed(5)}`
-            : "None"}
+            : 'None'}
         </p>
 
         <button

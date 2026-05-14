@@ -6,7 +6,6 @@ import L from 'leaflet'
 
 import 'leaflet/dist/leaflet.css'
 
-// Fix marker icons
 delete (L.Icon.Default.prototype as unknown as Record<string, unknown>)._getIconUrl
 
 L.Icon.Default.mergeOptions({
