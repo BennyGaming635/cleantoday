@@ -9,13 +9,12 @@ const CreateMap = dynamic(() => import('@/components/map/CreateMap'), {
   ssr: false,
 })
 
-const router = useRouter()
-
 export default function CreatePage() {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [locationName, setLocationName] = useState('')
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null)
+  const router = useRouter()
 
   const [loading, setLoading] = useState(false)
 
