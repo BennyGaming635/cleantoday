@@ -32,6 +32,7 @@ export default function CleanupMap() {
   const [events, setEvents] = useState<Event[]>([])
   const [userId, setUserId] = useState<string | null>(null)
   const [rsvps, setRsvps] = useState<string[]>([])
+  const [rsvpCounts, setRsvpCounts] = useState<Record<string, number>>({})
 
   useEffect(() => {
     const load = async () => {
@@ -46,6 +47,16 @@ export default function CleanupMap() {
         .select('*')
 
       setEvents(eventsData ?? [])
+
+      const { data: rsvpData } = await supabase
+        .from('event_rsvps')
+        .select('event_id')
+
+      const counts: Record<string, number> = {}
+      rsvpData?.forEach((r) => {
+        counts[r.event_id] = (counts[r.event_id] || 0) + 1
+      })
+      setRsvpCounts(counts)
 
       if (user) {
         const { data: rsvpData } = await supabase
@@ -131,6 +142,8 @@ export default function CleanupMap() {
                 className="text-blue-600 text-sm"
               >
                 {rsvps.includes(event.id) ? 'Cancel RSVP' : 'RSVP'}
+                {' · '}
+                {rsvpCounts[event.id] || 0}
               </button>
 
               {userId === event.creator_id && (
