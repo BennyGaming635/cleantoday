@@ -9,23 +9,17 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
   const [sent, setSent] = useState(false)
 
-  const signIn = async () => {
-    if (!email) return
-
-    setLoading(true)
-
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
+  const signInWithGitHub = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'github',
+      options: {
+        redirectTo: `${window.location.origin}/explore`,
+      },
     })
-
-    setLoading(false)
 
     if (error) {
       alert(error.message)
-      return
     }
-
-    setSent(true)
   }
 
   return (
@@ -44,30 +38,12 @@ export default function LoginPage() {
                 Sign in to create and join cleanup events
               </p>
             </div>
-
-            {sent ? (
-              <div className="bg-green-50 text-green-700 p-4 rounded-lg text-sm">
-                Check your email for a login link.
-              </div>
-            ) : (
-              <>
-
-                <input
-                  className="w-full border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-600"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-
-                <button
-                  onClick={signIn}
-                  disabled={loading}
-                  className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg transition"
-                >
-                  {loading ? 'Sending link...' : 'Send magic link'}
-                </button>
-              </>
-            )}
+              <button
+                onClick={signInWithGitHub}
+                className="w-full bg-black hover:bg-gray-900 text-white py-3 rounded-lg transition flex items-center justify-center gap-2"
+              >
+                Continue with GitHub
+              </button>
 
             <p className="text-xs text-gray-400 text-center">
               By continuing, you agree to join cleanup events and help keep your community clean!
