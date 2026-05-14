@@ -2,10 +2,21 @@
 
 import { useEffect, useState } from 'react'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import { useRouter } from 'next/navigation'
 import L from 'leaflet'
 import { supabase } from '@/lib/supabase'
 
 import 'leaflet/dist/leaflet.css'
+
+type Event = {
+  id: string
+  title: string
+  description: string
+  location_name: string
+  latitude: number
+  longitude: number
+  creator_id: string
+}
 
 delete (L.Icon.Default.prototype as unknown as Record<string, unknown>)._getIconUrl
 
@@ -18,21 +29,12 @@ L.Icon.Default.mergeOptions({
     'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
 })
 
-type Event = {
-  id: string
-  title: string
-  description: string
-  location_name: string
-  latitude: number
-  longitude: number
-  creator_id: string
-}
-
 export default function CleanupMap() {
+  const router = useRouter()
+
   const [events, setEvents] = useState<Event[]>([])
   const [userId, setUserId] = useState<string | null>(null)
   const [rsvps, setRsvps] = useState<string[]>([])
-  const [rsvpCounts, setRsvpCounts] = useState<Record<string, number>>({})
 
   useEffect(() => {
     const load = async () => {
@@ -48,16 +50,6 @@ export default function CleanupMap() {
 
       setEvents(eventsData ?? [])
 
-      const { data: rsvpData } = await supabase
-        .from('event_rsvps')
-        .select('event_id')
-
-      const counts: Record<string, number> = {}
-      rsvpData?.forEach((r) => {
-        counts[r.event_id] = (counts[r.event_id] || 0) + 1
-      })
-      setRsvpCounts(counts)
-
       if (user) {
         const { data: rsvpData } = await supabase
           .from('event_rsvps')
@@ -71,23 +63,9 @@ export default function CleanupMap() {
     load()
   }, [])
 
-  const deleteEvent = async (id: string) => {
-    const confirmDelete = confirm('Delete this event?')
-    if (!confirmDelete) return
-
-    const { error } = await supabase
-      .from('cleanup_events')
-      .delete()
-      .eq('id', id)
-
-    if (!error) {
-      setEvents((prev) => prev.filter((e) => e.id !== id))
-    }
-  }
-
   const toggleRsvp = async (eventId: string) => {
     if (!userId) {
-      alert('You must be logged in')
+      router.push('/login')
       return
     }
 
@@ -111,6 +89,20 @@ export default function CleanupMap() {
     }
   }
 
+  const deleteEvent = async (id: string) => {
+    const confirmDelete = confirm('Delete this event?')
+    if (!confirmDelete) return
+
+    const { error } = await supabase
+      .from('cleanup_events')
+      .delete()
+      .eq('id', id)
+
+    if (!error) {
+      setEvents((prev) => prev.filter((e) => e.id !== id))
+    }
+  }
+
   return (
     <MapContainer
       center={[-34.9285, 138.6007]}
@@ -126,6 +118,9 @@ export default function CleanupMap() {
         <Marker
           key={event.id}
           position={[event.latitude, event.longitude]}
+          eventHandlers={{
+            click: () => router.push(`/event/${event.id}`),
+          }}
         >
           <Popup>
             <div className="space-y-2">
@@ -142,8 +137,6 @@ export default function CleanupMap() {
                 className="text-blue-600 text-sm"
               >
                 {rsvps.includes(event.id) ? 'Cancel RSVP' : 'RSVP'}
-                {' · '}
-                {rsvpCounts[event.id] || 0}
               </button>
 
               {userId === event.creator_id && (
@@ -154,6 +147,13 @@ export default function CleanupMap() {
                   Delete
                 </button>
               )}
+
+              <button
+                onClick={() => router.push(`/event/${event.id}`)}
+                className="text-green-600 text-sm block underline"
+              >
+                View full event →
+              </button>
             </div>
           </Popup>
         </Marker>
