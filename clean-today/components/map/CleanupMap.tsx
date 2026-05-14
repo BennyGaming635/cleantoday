@@ -3,8 +3,9 @@
 import { useEffect, useState } from 'react'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import L from 'leaflet'
-import 'leaflet/dist/leaflet.css'
 import { supabase } from '@/lib/supabase'
+
+import 'leaflet/dist/leaflet.css'
 
 delete (L.Icon.Default.prototype as unknown as Record<string, unknown>)._getIconUrl
 
@@ -20,27 +21,52 @@ L.Icon.Default.mergeOptions({
 type Event = {
   id: string
   title: string
+  description: string
+  location_name: string
   latitude: number
   longitude: number
-  location_name: string | null
+  creator_id: string
 }
 
 export default function CleanupMap() {
   const [events, setEvents] = useState<Event[]>([])
+  const [userId, setUserId] = useState<string | null>(null)
 
   useEffect(() => {
-    const fetchEvents = async () => {
+    const load = async () => {
+      // get user
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+
+      setUserId(user?.id ?? null)
+
+      // fetch events
       const { data, error } = await supabase
         .from('cleanup_events')
         .select('*')
 
       if (!error && data) {
-        setEvents(data as Event[])
+        setEvents(data)
       }
     }
 
-    fetchEvents()
+    load()
   }, [])
+
+  const deleteEvent = async (id: string) => {
+    const confirmDelete = confirm('Delete this event?')
+    if (!confirmDelete) return
+
+    const { error } = await supabase
+      .from('cleanup_events')
+      .delete()
+      .eq('id', id)
+
+    if (!error) {
+      setEvents((prev) => prev.filter((e) => e.id !== id))
+    }
+  }
 
   return (
     <MapContainer
@@ -59,10 +85,21 @@ export default function CleanupMap() {
           position={[event.latitude, event.longitude]}
         >
           <Popup>
-            <div>
+            <div className="space-y-1">
               <strong>{event.title}</strong>
-              <br />
-              {event.location_name}
+              <p>{event.description}</p>
+              <p className="text-xs text-gray-500">
+                {event.location_name}
+              </p>
+
+              {userId === event.creator_id && (
+                <button
+                  onClick={() => deleteEvent(event.id)}
+                  className="text-red-600 text-sm"
+                >
+                  Delete
+                </button>
+              )}
             </div>
           </Popup>
         </Marker>

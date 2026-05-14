@@ -17,6 +17,20 @@ export default function Dashboard() {
     const [User, setUser] = useState<User | null>(null)
     const [events, setEvents] = useState<Event[]>([])
     const [loading, setLoading] = useState(true)
+    const deleteEvent = async (id: string) => {
+        const confirmDelete = confirm('Are you sure you want to delete this event?')
+        if (!confirmDelete) return
+        const { error } = await supabase
+        .from('cleanup_events')
+        .delete()
+        .eq('id', id)
+
+        if (error) {
+            alert(error.message)
+        } else {
+            setEvents((prev) => prev.filter((e) => e.id !== id))
+        }
+    }
 
     useEffect(() => {
         const load = async () => {
