@@ -7,6 +7,7 @@ import L from 'leaflet'
 import { supabase } from '@/lib/supabase'
 
 import 'leaflet/dist/leaflet.css'
+import { get } from 'http'
 
 type Event = {
   id: string
@@ -16,6 +17,7 @@ type Event = {
   latitude: number
   longitude: number
   creator_id: string
+  event_time: string | null
 }
 
 delete (L.Icon.Default.prototype as unknown as Record<string, unknown>)._getIconUrl
@@ -88,6 +90,39 @@ export default function CleanupMap() {
       setRsvps((prev) => [...prev, eventId])
     }
   }
+  const now = new Date()
+  const getEventStatus = (eventTime: string | null) => {
+    if (!eventTime) return 'upcoming'
+    const t = new Date(eventTime)
+  
+    if (t < now) return 'past'
+    return 'upcoming'
+  }
+
+  const getMarkerColor = (status: string) => {
+    switch (status) {
+      case 'past':
+        return 'red'
+      default:
+        return 'green'
+    }
+  }
+
+  const greenIcon = new L.Icon({
+    iconUrl: '/markers/green.png',
+    iconSize: [40, 41],
+    iconAnchor: [12, 41],
+  })
+
+  const redIcon = new L.Icon({
+    iconUrl: '/markers/red.png',
+    iconSize: [40, 41],
+    iconAnchor: [12, 41],
+  })
+
+  const status = getEventStatus(events[0]?.event_time ?? null)
+  const icon =
+    status === 'past' ? redIcon : greenIcon
 
   const deleteEvent = async (id: string) => {
     const confirmDelete = confirm('Delete this event?')
@@ -118,6 +153,7 @@ export default function CleanupMap() {
         <Marker
           key={event.id}
           position={[event.latitude, event.longitude]}
+          icon={icon}
           eventHandlers={{
             click: () => router.push(`/event/${event.id}`),
           }}
