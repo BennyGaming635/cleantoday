@@ -487,7 +487,7 @@ export default function EventPage() {
                   setPostContent(e.target.value)
                 }
                 placeholder="Share something..."
-                className="w-full border rounded-lg p-3 min-h-[120px]"
+                className="w-full border rounded-lg p-3 min-h-[120px] text-gray-700"
               />
 
               <button
