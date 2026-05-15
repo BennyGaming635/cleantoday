@@ -14,7 +14,7 @@ type Profile = {
 
 export default function UserProfilePage() {
   const { id } = useParams<{ id: string }>()
-
+  const [totalKgCollected, setTotalKgCollected] = useState(0)
   const [user, setUser] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -32,6 +32,17 @@ export default function UserProfilePage() {
         .single()
 
       setUser(profile)
+
+      const { data: completedEvents } = await supabase
+        .from('cleanup_events')
+        .select('kg_collected')
+        .eq('creator_id', id)
+        .eq('completed', true)
+
+      const totalKg = completedEvents?.reduce((sum, event) => sum + (event.kg_collected || 0),
+      0
+    ) || 0
+      setTotalKgCollected(totalKg)
 
       const { count: organised } = await supabase
         .from('cleanup_events')
@@ -114,6 +125,15 @@ export default function UserProfilePage() {
             </p>
             <p className="text-sm text-gray-600">
               Events attended
+            </p>
+          </div>
+
+          <div className="bg-white border rounded-xl p-6 text-center">
+            <p className="text-3xl font-bold text-green-700">
+              {totalKgCollected} kg
+            </p>
+            <p className="text-sm text-gray-600">
+              Total collected
             </p>
           </div>
         </div>
