@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
+import { Button } from '@heroui/react'
 
 type Profile = {
   username: string
@@ -137,11 +138,10 @@ export default function Navbar() {
               )}
             </div>
           ) : (
-            <Link
-              href="/login"
-              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm transition"
-            >
-              Login
+            <Link href="/login">
+              <Button size="sm" className="bg-green-700 text-white hover:bg-green-800">
+                Login
+              </Button>
             </Link>
           )}
         </div>
