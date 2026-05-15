@@ -176,8 +176,8 @@ export default function EventPage() {
           </div>
 
           <div className="bg-white rounded-xl shadow p-6">
-            <h2 className="text-xl font-semibold mb-4">
-              Organizer
+            <h2 className="text-xl font-semibold mb-4 text-gray-800">
+              Organiser
             </h2>
 
             {creator && (
@@ -189,7 +189,7 @@ export default function EventPage() {
                 />
 
                 <div>
-                  <h3 className="font-semibold text-lg">
+                  <h3 className="font-semibold text-lg text-gray-700">
                     {creator.username}
                   </h3>
 
