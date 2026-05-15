@@ -14,6 +14,8 @@ type Event = {
   longitude: number
   creator_id: string
   event_time: string | null
+  completed: boolean
+  kg_collected: number
 }
 
 type Profile = {
@@ -157,12 +159,18 @@ export default function EventPage() {
     : false
 
   const toggleRsvp = async () => {
+    if (!event) {
+      return
+    }
+
+    if (event.completed) {
+      alert('This event has already been completed and can no longer be RSVPed to.')
+      return
+    }
     if (!userId) {
       router.push('/login')
       return
     }
-
-    if (!event) return
 
     if (isGoing) {
       await supabase
@@ -399,13 +407,18 @@ export default function EventPage() {
             <div className="flex gap-3">
               <button
                 onClick={toggleRsvp}
+                disabled={event.completed}
                 className={`px-5 py-2 rounded-lg text-white transition ${
-                  isGoing
-                    ? 'bg-gray-600 hover:bg-gray-700'
-                    : 'bg-blue-600 hover:bg-blue-700'
+                  event.completed
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : isGoing
+                  ? 'bg-gray-600 hover:bg-gray-700'
+                  : 'bg-blue-600 hover:bg-blue-700'
                 }`}
               >
-                {isGoing
+                {event.completed
+                  ? 'Event Completed'
+                  : isGoing
                   ? 'Cancel RSVP'
                   : 'RSVP'}
               </button>
