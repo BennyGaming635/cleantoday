@@ -50,7 +50,7 @@ export default function DashboardPage() {
     const init = async () => {
       await loadEvents()
     }
-    
+
     init()
   }, [])
 
@@ -97,11 +97,12 @@ export default function DashboardPage() {
       .eq('id', eventId)
 
     if (error) {
+      console.error(error)
       alert(error.message)
       return
     }
-
-    loadEvents()
+    alert('Event marked as complete!')
+    await loadEvents()
   }
 
   return (
