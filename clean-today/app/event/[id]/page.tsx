@@ -32,75 +32,128 @@ type AttendeeProfile = {
   avatar_url: string
 }
 
+type EventPost = {
+  id: string
+  content: string
+  image_url: string | null
+  user_id: string
+  created_at: string
+  profile?: {
+    username: string
+    avatar_url: string
+  }
+}
+
 export default function EventPage() {
-  const { id } = useParams()
+  const params = useParams()
   const router = useRouter()
-  const [attendees, setAttendees] = useState<AttendeeProfile[]>([])
+
+  const eventId = params.id as string
 
   const [event, setEvent] = useState<Event | null>(null)
   const [creator, setCreator] = useState<Profile | null>(null)
 
   const [userId, setUserId] = useState<string | null>(null)
+
   const [rsvps, setRsvps] = useState<string[]>([])
+  const [attendees, setAttendees] = useState<AttendeeProfile[]>([])
+
+  const [posts, setPosts] = useState<EventPost[]>([])
+  const [postContent, setPostContent] = useState('')
+  const [imageFile, setImageFile] = useState<File | null>(null)
 
   const [loading, setLoading] = useState(true)
+  const [posting, setPosting] = useState(false)
+
+  const load = async () => {
+    setLoading(true)
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+
+    setUserId(user?.id ?? null)
+
+    const { data: eventData } = await supabase
+      .from('cleanup_events')
+      .select('*')
+      .eq('id', eventId)
+      .single()
+
+    if (!eventData) {
+      setLoading(false)
+      return
+    }
+
+    setEvent(eventData)
+
+    const { data: creatorData } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', eventData.creator_id)
+      .single()
+
+    setCreator(creatorData)
+
+    const { data: rsvpData } = await supabase
+      .from('event_rsvps')
+      .select('user_id')
+      .eq('event_id', eventId)
+
+    const attendeeIds =
+      rsvpData?.map((r: RSVP) => r.user_id) || []
+
+    setRsvps(attendeeIds)
+
+    if (attendeeIds.length > 0) {
+      const { data: attendeeProfiles } = await supabase
+        .from('profiles')
+        .select('id, username, avatar_url')
+        .in('id', attendeeIds)
+
+      setAttendees(attendeeProfiles || [])
+    }
+
+    const { data: postsData } = await supabase
+      .from('event_posts')
+      .select('*')
+      .eq('event_id', eventId)
+      .order('created_at', { ascending: false })
+
+    if (postsData && postsData.length > 0) {
+      const postUserIds = postsData.map(
+        (p) => p.user_id
+      )
+
+      const { data: profileData } = await supabase
+        .from('profiles')
+        .select('id, username, avatar_url')
+        .in('id', postUserIds)
+
+      const mergedPosts = postsData.map((post) => ({
+        ...post,
+        profile: profileData?.find(
+          (p) => p.id === post.user_id
+        ),
+      }))
+
+      setPosts(mergedPosts)
+    }
+
+    setLoading(false)
+  }
 
   useEffect(() => {
-    const load = async () => {
-      setLoading(true)
-
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-
-      setUserId(user?.id ?? null)
-
-      const { data: eventData, error: eventError } = await supabase
-        .from('cleanup_events')
-        .select('*')
-        .eq('id', id)
-        .single()
-
-      if (eventError || !eventData) {
-        setLoading(false)
-        return
-      }
-
-      setEvent(eventData)
-
-      const { data: creatorData } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', eventData.creator_id)
-        .single()
-
-      setCreator(creatorData)
-
-      const { data: rsvpData } = await supabase
-        .from('event_rsvps')
-        .select('user_id')
-        .eq('event_id', id)
-
-      setRsvps(rsvpData?.map((r: RSVP) => r.user_id) ?? [])
-
-      if (rsvpData && rsvpData.length > 0) {
-        const userIds = rsvpData.map((r: RSVP) => r.user_id)
-        const { data: attendeeProfiles } = await supabase
-          .from('profiles')
-          .select('id, username, avatar_url')
-          .in('id', userIds)
-        setAttendees(attendeeProfiles ?? [])
-      }
-
-      setLoading(false)
+    const run = async () => {
+      await load()
     }
 
-    if (id) {
-      load()
-    }
-  }, [id])
+    void run()
+  }, [])
 
-  const isGoing = userId ? rsvps.includes(userId) : false
+  const isGoing = userId
+    ? rsvps.includes(userId)
+    : false
 
   const toggleRsvp = async () => {
     if (!userId) {
@@ -117,7 +170,13 @@ export default function EventPage() {
         .eq('event_id', event.id)
         .eq('user_id', userId)
 
-      setRsvps((prev) => prev.filter((u) => u !== userId))
+      setRsvps((prev) =>
+        prev.filter((u) => u !== userId)
+      )
+
+      setAttendees((prev) =>
+        prev.filter((a) => a.id !== userId)
+      )
     } else {
       await supabase.from('event_rsvps').insert({
         event_id: event.id,
@@ -125,23 +184,131 @@ export default function EventPage() {
       })
 
       setRsvps((prev) => [...prev, userId])
+
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('id, username, avatar_url')
+        .eq('id', userId)
+        .single()
+
+      if (profile) {
+        setAttendees((prev) => [...prev, profile])
+      }
     }
   }
 
   const deleteEvent = async () => {
     if (!event) return
 
-    const confirmDelete = confirm('Delete this event?')
-    if (!confirmDelete) return
+    const confirmed = confirm(
+      'Delete this event?'
+    )
 
-    const { error } = await supabase
+    if (!confirmed) return
+
+    await supabase
       .from('cleanup_events')
       .delete()
       .eq('id', event.id)
 
-    if (!error) {
-      router.push('/explore')
+    router.push('/explore')
+  }
+
+  const createPost = async () => {
+    if (!userId || !event) {
+      router.push('/login')
+      return
     }
+
+    if (!postContent.trim() && !imageFile) {
+      alert('Write something or upload an image')
+      return
+    }
+
+    setPosting(true)
+
+    try {
+      let imageUrl: string | null = null
+
+      if (imageFile) {
+        const fileExt =
+          imageFile.name.split('.').pop()
+
+        const fileName = `${crypto.randomUUID()}.${fileExt}`
+
+        const { error: uploadError } =
+          await supabase.storage
+            .from('event-images')
+            .upload(fileName, imageFile)
+
+        if (uploadError) {
+          console.error(uploadError)
+          alert(uploadError.message)
+          setPosting(false)
+          return
+        }
+
+        const {
+          data: { publicUrl },
+        } = supabase.storage
+          .from('event-images')
+          .getPublicUrl(fileName)
+
+        imageUrl = publicUrl
+      }
+
+      const { error: insertError } =
+        await supabase
+          .from('event_posts')
+          .insert({
+            event_id: event.id,
+            user_id: userId,
+            content: postContent,
+            image_url: imageUrl,
+          })
+
+      if (insertError) {
+        console.error(insertError)
+        alert(insertError.message)
+        setPosting(false)
+        return
+      }
+
+      const { data: postsData } = await supabase
+        .from('event_posts')
+        .select('*')
+        .eq('event_id', event.id)
+        .order('created_at', {
+          ascending: false,
+        })
+
+      const userIds =
+        postsData?.map((p) => p.user_id) || []
+
+      const { data: profileData } =
+        await supabase
+          .from('profiles')
+          .select('id, username, avatar_url')
+          .in('id', userIds)
+
+      const mergedPosts =
+        postsData?.map((post) => ({
+          ...post,
+          profile: profileData?.find(
+            (p) => p.id === post.user_id
+          ),
+        })) || []
+
+      setPosts(mergedPosts)
+
+      setPostContent('')
+      setImageFile(null)
+    } catch (err) {
+      console.error(err)
+      alert('Something went wrong')
+    }
+
+    setPosting(false)
   }
 
   if (loading) {
@@ -197,7 +364,7 @@ export default function EventPage() {
             </h2>
 
             {creator && (
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 text-gray-700">
                 <img
                   src={creator.avatar_url}
                   alt={creator.username}
@@ -205,7 +372,7 @@ export default function EventPage() {
                 />
 
                 <div>
-                  <h3 className="font-semibold text-lg text-gray-700">
+                  <h3 className="font-semibold text-lg">
                     {creator.username}
                   </h3>
 
@@ -218,12 +385,10 @@ export default function EventPage() {
           </div>
 
           <div className="bg-white rounded-xl shadow p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div>
-              <p className="text-blue-600 font-medium">
-                {rsvps.length} RSVP
-                {rsvps.length !== 1 ? 's' : ''}
-              </p>
-            </div>
+            <p className="text-blue-600 font-medium">
+              {rsvps.length} RSVP
+              {rsvps.length !== 1 ? 's' : ''}
+            </p>
 
             <div className="flex gap-3">
               <button
@@ -234,7 +399,9 @@ export default function EventPage() {
                     : 'bg-blue-600 hover:bg-blue-700'
                 }`}
               >
-                {isGoing ? 'Cancel RSVP' : 'RSVP'}
+                {isGoing
+                  ? 'Cancel RSVP'
+                  : 'RSVP'}
               </button>
 
               {userId === event.creator_id && (
@@ -248,8 +415,8 @@ export default function EventPage() {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow p-6 text-gray-800">
-            <h2 className="text-xl font-semibold mb-4">
+          <div className="bg-white rounded-xl shadow p-6">
+            <h2 className="text-xl font-semibold mb-4 text-gray-800">
               Location
             </h2>
 
@@ -298,6 +465,99 @@ export default function EventPage() {
                 ))}
               </div>
             )}
+          </div>
+
+          <div className="bg-white rounded-xl shadow p-6 space-y-6">
+
+            <div>
+              <h2 className="text-xl font-semibold text-gray-800">
+                Community Posts
+              </h2>
+
+              <p className="text-gray-500 text-sm mt-1">
+                Share updates and cleanup photos
+              </p>
+            </div>
+
+            <div className="space-y-4 border rounded-xl p-4 bg-gray-50">
+
+              <textarea
+                value={postContent}
+                onChange={(e) =>
+                  setPostContent(e.target.value)
+                }
+                placeholder="Share something..."
+                className="w-full border rounded-lg p-3 min-h-[120px]"
+              />
+
+              <button
+                onClick={createPost}
+                disabled={posting}
+                className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg"
+              >
+                {posting
+                  ? 'Posting...'
+                  : 'Post'}
+              </button>
+            </div>
+
+            <div className="space-y-6">
+              {posts.length === 0 ? (
+                <p className="text-gray-500">
+                  No posts yet.
+                </p>
+              ) : (
+                posts.map((post) => (
+                  <div
+                    key={post.id}
+                    className="border rounded-xl p-5 space-y-4"
+                  >
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={
+                          post.profile
+                            ?.avatar_url ||
+                          '/default-avatar.png'
+                        }
+                        alt={
+                          post.profile
+                            ?.username || 'User'
+                        }
+                        className="w-12 h-12 rounded-full object-cover"
+                      />
+
+                      <div>
+                        <p className="font-medium text-gray-800">
+                          {post.profile
+                            ?.username || 'User'}
+                        </p>
+
+                        <p className="text-xs text-gray-500">
+                          {new Date(
+                            post.created_at
+                          ).toLocaleString()}
+                        </p>
+                      </div>
+                    </div>
+
+                    {post.content && (
+                      <p className="text-gray-700 whitespace-pre-wrap">
+                        {post.content}
+                      </p>
+                    )}
+
+                    {post.image_url && (
+                      <img
+                        src={post.image_url}
+                        alt="Post"
+                        className="rounded-xl border max-h-[500px] w-full object-cover"
+                      />
+                    )}
+                  </div>
+                ))
+              )}
+            </div>
+
           </div>
         </div>
       </div>
