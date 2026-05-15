@@ -13,6 +13,7 @@ type Event = {
   latitude: number
   longitude: number
   creator_id: string
+  event_time: string | null
 }
 
 type Profile = {
@@ -350,6 +351,11 @@ export default function EventPage() {
 
               <p className="text-gray-500 mt-2">
                 📍 {event.location_name}
+              </p>
+              <p className="text-gray-500 mt-2">
+                🕒 {event.event_time
+                  ? new Date(event.event_time).toLocaleString()
+                  : 'No time set'}
               </p>
             </div>
 
