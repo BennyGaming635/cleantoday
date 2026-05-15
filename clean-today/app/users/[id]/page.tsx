@@ -39,9 +39,11 @@ export default function UserProfilePage() {
         .eq('creator_id', id)
         .eq('completed', true)
 
-      const totalKg = completedEvents?.reduce((sum, event) => sum + (event.kg_collected || 0),
-      0
-    ) || 0
+      const totalKg =
+        completedEvents?.reduce((sum, event) => {
+          return sum + Number(event.kg_collected || 0)
+        }, 0) || 0
+
       setTotalKgCollected(totalKg)
 
       const { count: organised } = await supabase
