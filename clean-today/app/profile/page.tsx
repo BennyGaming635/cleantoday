@@ -111,27 +111,27 @@ export default function ProfilePage() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium">
+              <label className="text-sm font-medium text-gray-800">
                 Name
               </label>
 
               <input
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full border p-3 rounded-lg"
+                className="w-full border p-3 rounded-lg text-gray-600"
                 placeholder="Your name"
               />
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium">
+              <label className="text-sm font-medium text-gray-800">
                 Bio
               </label>
 
               <textarea
                 value={bio}
                 onChange={(e) => setBio(e.target.value)}
-                className="w-full border p-3 rounded-lg"
+                className="w-full border p-3 rounded-lg text-gray-600"
                 rows={4}
                 placeholder="Tell people about yourself..."
               />
