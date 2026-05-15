@@ -26,9 +26,16 @@ type RSVP = {
   user_id: string
 }
 
+type AttendeeProfile = {
+  id: string
+  username: string
+  avatar_url: string
+}
+
 export default function EventPage() {
   const { id } = useParams()
   const router = useRouter()
+  const [attendees, setAttendees] = useState<AttendeeProfile[]>([])
 
   const [event, setEvent] = useState<Event | null>(null)
   const [creator, setCreator] = useState<Profile | null>(null)
@@ -75,6 +82,15 @@ export default function EventPage() {
         .eq('event_id', id)
 
       setRsvps(rsvpData?.map((r: RSVP) => r.user_id) ?? [])
+
+      if (rsvpData && rsvpData.length > 0) {
+        const userIds = rsvpData.map((r: RSVP) => r.user_id)
+        const { data: attendeeProfiles } = await supabase
+          .from('profiles')
+          .select('id, username, avatar_url')
+          .in('id', userIds)
+        setAttendees(attendeeProfiles ?? [])
+      }
 
       setLoading(false)
     }
@@ -232,7 +248,7 @@ export default function EventPage() {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow p-6">
+          <div className="bg-white rounded-xl shadow p-6 text-gray-800">
             <h2 className="text-xl font-semibold mb-4">
               Location
             </h2>
@@ -254,28 +270,35 @@ export default function EventPage() {
           </div>
 
           <div className="bg-white rounded-xl shadow p-6">
-            <h2 className="text-xl font-semibold mb-4">
+            <h2 className="text-xl font-semibold mb-4 text-gray-800">
               Attendees
             </h2>
 
-            {rsvps.length === 0 ? (
+            {attendees.length === 0 ? (
               <p className="text-gray-500">
                 No attendees yet.
               </p>
             ) : (
-              <div className="flex items-center gap-2 flex-wrap">
-                {rsvps.map((user) => (
+              <div className="flex flex-wrap gap-4">
+                {attendees.map((attendee) => (
                   <div
-                    key={user}
-                    className="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700"
+                    key={attendee.id}
+                    className="flex items-center gap-3 bg-gray-50 border rounded-full pl-2 pr-4 py-2"
                   >
-                    Attendee
+                    <img
+                      src={attendee.avatar_url}
+                      alt={attendee.username}
+                      className="w-10 h-10 rounded-full object-cover"
+                    />
+
+                    <span className="text-sm font-medium text-gray-700">
+                      {attendee.username}
+                    </span>
                   </div>
                 ))}
               </div>
             )}
           </div>
-
         </div>
       </div>
     </div>
