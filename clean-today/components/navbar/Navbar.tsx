@@ -86,7 +86,6 @@ export default function Navbar() {
             <Link href="/">Home</Link>
             <Link href="/explore">Explore</Link>
             <Link href="/create">Create Event</Link>
-            <Link href="/dashboard">Dashboard</Link>
           </div>
 
           {profile ? (
@@ -110,6 +109,14 @@ export default function Navbar() {
                       {profile.username}
                     </p>
                   </div>
+
+                  <Link
+                    href="/dashboard"
+                    className="block px-4 py-3 text-sm hover:bg-gray-50 text-gray-800"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    Dashboard
+                  </Link>
 
                   <Link
                     href="/profile"
