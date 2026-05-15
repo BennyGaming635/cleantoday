@@ -86,7 +86,8 @@ export default function Navbar() {
           <div className="hidden md:flex gap-6 text-sm font-medium text-green-700">
             <Link href="/">Home</Link>
             <Link href="/explore">Explore</Link>
-            <Link href="/create">Create Event</Link>
+            <Link href="/create">Create</Link>
+            <Link href="/users">Users</Link>
           </div>
 
           {profile ? (
