@@ -12,6 +12,7 @@ const CreateMap = dynamic(() => import('@/components/map/CreateMap'), {
 
 export default function CreatePage() {
   const router = useRouter()
+  const [eventTime, setEventTime] = useState('')
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [locationName, setLocationName] = useState('')
@@ -38,6 +39,7 @@ export default function CreatePage() {
       location_name: locationName,
       latitude: coords.lat,
       longitude: coords.lng,
+      event_time: eventTime ? new Date(eventTime).toISOString() : null,
       creator_id: user.id,
     })
 
@@ -80,7 +82,12 @@ export default function CreatePage() {
                 value={locationName}
                 onChange={(e) => setLocationName(e.target.value)}
               />
-
+              <input
+                type="datetime-local"
+                className="w-full border p-3 rounded-lg text-gray-600"
+                value={eventTime}
+                onChange={(e) => setEventTime(e.target.value)}
+              />
               <textarea
                 className="w-full border p-3 rounded-lg text-gray-600"
                 placeholder="Describe the cleanup..."
