@@ -3,8 +3,6 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Navbar from '@/components/navbar/Navbar'
-import CleanupMap from '@/components/map/CleanupMap'
-import dynamic from 'next/dynamic'
 import { supabase } from '@/lib/supabase'
 
 type GovUser = {
@@ -20,17 +18,13 @@ type Event = {
   location_name: string
   completed: boolean
   kg_collected: number | null
-  latitude: number | null
-  longitude: number | null
-  event_time: string | null
 }
 
 export default function GovDashboard() {
   const router = useRouter()
 
-  const [govUser] = useState<GovUser | null>(() => {
+  const [govUser, setGovUser] = useState<GovUser | null>(() => {
     if (typeof window === 'undefined') return null
-
     const stored = localStorage.getItem('gov_user')
     return stored ? (JSON.parse(stored) as GovUser) : null
   })
@@ -38,12 +32,7 @@ export default function GovDashboard() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const stored =
-      typeof window !== 'undefined'
-        ? localStorage.getItem('gov_user')
-        : null
-
-    if (!stored) {
+    if (!govUser) {
       router.push('/gov/login')
       return
     }
@@ -52,10 +41,10 @@ export default function GovDashboard() {
       const { data } = await supabase
         .from('cleanup_events')
         .select(
-          'id, title, location_name, completed, kg_collected, latitude, longitude, event_time'
+          'id, title, location_name, completed, kg_collected'
         )
 
-      if (data) setEvents(data as Event[])
+      if (data) setEvents(data)
       setLoading(false)
     }
 
@@ -69,8 +58,13 @@ export default function GovDashboard() {
 
   const totalEvents = events.length
 
-  const completed = events.filter((e) => e.completed).length
-  const upcoming = events.filter((e) => !e.completed).length
+  const completed = events.filter(
+    (e) => e.completed
+  ).length
+
+  const upcoming = events.filter(
+    (e) => !e.completed
+  ).length
 
   if (loading) {
     return (
@@ -104,7 +98,7 @@ export default function GovDashboard() {
 
           <div className="bg-white border rounded-2xl p-6">
             <p className="text-gray-500">Total Events</p>
-            <p className="text-3xl font-bold text-blue-600">
+            <p className="text-3xl font-bold text-blue-300">
               {totalEvents}
             </p>
           </div>
@@ -137,8 +131,8 @@ export default function GovDashboard() {
             Cleanup Map
           </h2>
 
-          <div className="h-[450px] w-full">
-            <CleanupMap />
+          <div className="h-[420px] bg-green-100 rounded-2xl flex items-center justify-center text-gray-600">
+            Map analytics layer coming next
           </div>
         </div>
 
