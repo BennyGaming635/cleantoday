@@ -63,19 +63,6 @@ export default function GovPage() {
                             improvements across regions.
                         </p>
                     </div>
-                    <div className="bg-white border rounded-3xl p-8 shadow-sm">
-                        <div className="text-4xl mb-5">📈</div>
-
-                        <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                            Growable with your needs
-                        </h2>
-                        <p className="text-gray-600 leading-relaxed">
-                            Our devlelopment team is happy to work with your
-                            team to add what you need to help your communities.
-                            Wether it is a custom dashboard or a custom report,
-                            we are here to help.
-                        </p>
-                    </div>
                 </div>
             </section>
             <section className="max-w-7xl mx-auto px-6 pb-28">
@@ -89,7 +76,7 @@ export default function GovPage() {
                         We are currently exploring partnerships with councils,
                         environmental agencies, and government bodies
                         looking to better understand and support community-led
-                        environmental initiatives.
+                        envrionmental initatives.
                     </p>
 
                     <a
