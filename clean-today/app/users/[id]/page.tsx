@@ -12,11 +12,61 @@ type Profile = {
   bio: string | null
 }
 
+const getLevel = (kg: number) => {
+  if (kg >= 1000) {
+    return {
+      level: 7,
+      title: 'Cleanup Legend',
+    }
+  }
+
+  if (kg >= 600) {
+    return {
+      level: 6,
+      title: 'Planet Guardian',
+    }
+  }
+
+  if (kg >= 300) {
+    return {
+      level: 5,
+      title: 'Eco Champion',
+    }
+  }
+
+  if (kg >= 150) {
+    return {
+      level: 4,
+      title: 'Waste Warrior',
+    }
+  }
+
+  if (kg >= 75) {
+    return {
+      level: 3,
+      title: 'Beach Protector',
+    }
+  }
+
+  if (kg >= 25) {
+    return {
+      level: 2,
+      title: 'Community Helper',
+    }
+  }
+
+  return {
+    level: 1,
+    title: 'Rookie Cleaner',
+  }
+}
+
 export default function UserProfilePage() {
   const { id } = useParams<{ id: string }>()
   const [totalKgCollected, setTotalKgCollected] = useState(0)
   const [user, setUser] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
+  const userLevel = getLevel(totalKgCollected)
 
   const [organisedCount, setOrganisedCount] = useState(0)
   const [attendedCount, setAttendedCount] = useState(0)
@@ -136,6 +186,19 @@ export default function UserProfilePage() {
             </p>
             <p className="text-sm text-gray-600">
               Total collected
+            </p>
+          </div>
+          <div className="bg-white border rounded-2xl p-6">
+            <p className="text-sm text-gray-500">
+              Level
+            </p>
+
+            <h2 className="text-3xl font-bold text-green-700">
+              Level {userLevel.level}
+            </h2>
+
+            <p className="text-gray-700 mt-1">
+              {userLevel.title}
             </p>
           </div>
         </div>
