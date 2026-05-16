@@ -131,7 +131,7 @@ export default function GovDashboard() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
 
           <div className="bg-white border rounded-2xl p-6">
             <p className="text-gray-500">Total Events</p>
@@ -159,6 +159,15 @@ export default function GovDashboard() {
             <p className="text-3xl font-bold text-green-800">
               {totalKg}
             </p>
+          </div>
+          <div className="bg-white border rounded-2xl p-6">
+            <p className="text-gray-500">Generate Report</p>
+            <button
+              onClick={generateReport}
+              className="mt-2 bg-green-700 text-white px-4 py-2 rounded-lg"
+            >
+              Generate Report
+            </button>
           </div>
 
         </div>
@@ -199,12 +208,6 @@ export default function GovDashboard() {
                     {e.kg_collected || 0} kg
                   </p>
                 </div>
-                <button
-                  onClick={generateReport}
-                  className="bg-green-700 text-white px-5 py-3 rounded-xl"
-                >
-                  Generate Report
-                </button>
               </div>
             ))}
           </div>
