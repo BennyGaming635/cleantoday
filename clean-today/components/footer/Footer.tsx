@@ -49,7 +49,8 @@ export default function Footer() {
                 <div className="border-t mt-10 pt-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <p className="text-sm text-gray-500">
                         2026 Clean Today.
-                        A cleaner Today for a better Tomorrow.
+                        <br></br>
+                        A <b>Cleaner Today</b> for a better Tomorrow.
                     </p>
                 <div className="flex flex-wrap gap-4 text-sm text-gray-500">
                     <Link href="/">Home</Link>
