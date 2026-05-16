@@ -125,17 +125,6 @@ export default function GovDashboard() {
           </div>
 
         </div>
-
-        <div className="bg-white border rounded-3xl p-10">
-          <h2 className="text-2xl font-bold mb-4 text-gray-800">
-            Cleanup Map
-          </h2>
-
-          <div className="h-[420px] bg-green-100 rounded-2xl flex items-center justify-center text-gray-600">
-            Map analytics layer coming next
-          </div>
-        </div>
-
         <div className="bg-white border rounded-3xl p-8">
           <h2 className="text-2xl font-bold mb-6 text-gray-800">
             All Cleanups
