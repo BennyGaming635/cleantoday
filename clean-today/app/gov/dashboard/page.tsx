@@ -3,12 +3,9 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Navbar from '@/components/navbar/Navbar'
+import CleanupMap from '@/components/map/CleanupMap'
 import dynamic from 'next/dynamic'
 import { supabase } from '@/lib/supabase'
-
-const GovMap = dynamic(() => import('@/components/map/GovMap'), {
-  ssr: false,
-})
 
 type GovUser = {
   username: string
@@ -141,7 +138,7 @@ export default function GovDashboard() {
           </h2>
 
           <div className="h-[450px] w-full">
-            <GovMap events={events} />
+            <CleanupMap />
           </div>
         </div>
 
