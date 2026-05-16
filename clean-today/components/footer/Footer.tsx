@@ -34,7 +34,8 @@ export default function Footer() {
                             Government
                         </h3>
                         <div className="flex flex-col gap-2 text-sm text-gray-600">
-                            <Link href="/gov">Government Enquires</Link>
+                            <Link href="/gov">Gov Enquires</Link>
+                            <Link href="/gov/login">Gov Login</Link>
                         </div>
                     </div>
                     <div>
