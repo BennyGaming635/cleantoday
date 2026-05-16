@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Navbar from '@/components/navbar/Navbar'
 import { supabase } from '@/lib/supabase'
+import jsPDF from 'jspdf'
+import autoTable from 'jspdf-autotable'
 
 type GovUser = {
   username: string
@@ -65,6 +67,41 @@ export default function GovDashboard() {
   const upcoming = events.filter(
     (e) => !e.completed
   ).length
+
+  const generateReport = () => {
+    const doc = new jsPDF()
+    doc.setFontSize(22)
+    doc.text(
+      `${govUser?.council_name} Environmental Impact Report`,
+      14,
+      20
+    )
+
+    doc.setFontSize(12)
+    doc.text(
+      `Generated: ${new Date().toLocaleDateString()}`,
+      14,
+      30
+    )
+
+    doc.text(`Total Events: ${totalEvents}`, 14, 45)
+    doc.text(`Completed: ${completed}`, 14, 55)
+    doc.text(`Upcoming: ${upcoming}`, 14, 65)
+    doc.text(`Total Waste Collected: ${totalKg} kg`, 14, 75)
+
+    autoTable(doc, {
+      startY: 90,
+      head: [['Title', 'Location', 'Status', 'KG']],
+      body: events.map((e) => [
+        e.title,
+        e.location_name,
+        e.completed ? 'Completed' : 'Upcoming',
+        `${e.kg_collected || 0} kg`
+      ]),
+    })
+
+    doc.save('environmental_report.pdf')
+  }
 
   if (loading) {
     return (
@@ -162,6 +199,12 @@ export default function GovDashboard() {
                     {e.kg_collected || 0} kg
                   </p>
                 </div>
+                <button
+                  onClick={generateReport}
+                  className="bg-green-700 text-white px-5 py-3 rounded-xl"
+                >
+                  Generate Report
+                </button>
               </div>
             ))}
           </div>
