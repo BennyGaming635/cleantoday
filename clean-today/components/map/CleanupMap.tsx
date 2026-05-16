@@ -7,6 +7,7 @@ import L from 'leaflet'
 import { supabase } from '@/lib/supabase'
 
 import 'leaflet/dist/leaflet.css'
+import { get } from 'http'
 
 type Event = {
   id: string
@@ -49,7 +50,7 @@ export default function CleanupMap() {
         .from('cleanup_events')
         .select('*')
 
-      setEvents((eventsData as Event[]) ?? [])
+      setEvents(eventsData ?? [])
 
       if (user) {
         const { data: rsvpData } = await supabase
@@ -89,15 +90,22 @@ export default function CleanupMap() {
       setRsvps((prev) => [...prev, eventId])
     }
   }
-
   const now = new Date()
-
   const getEventStatus = (eventTime: string | null) => {
     if (!eventTime) return 'upcoming'
     const t = new Date(eventTime)
-
+  
     if (t < now) return 'past'
     return 'upcoming'
+  }
+
+  const getMarkerColor = (status: string) => {
+    switch (status) {
+      case 'past':
+        return 'red'
+      default:
+        return 'green'
+    }
   }
 
   const greenIcon = new L.Icon({
@@ -111,6 +119,10 @@ export default function CleanupMap() {
     iconSize: [40, 41],
     iconAnchor: [12, 41],
   })
+
+  const status = getEventStatus(events[0]?.event_time ?? null)
+  const icon =
+    status === 'past' ? redIcon : greenIcon
 
   const deleteEvent = async (id: string) => {
     const confirmDelete = confirm('Delete this event?')
@@ -137,68 +149,51 @@ export default function CleanupMap() {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
 
-      {events.map((event) => {
-        const status = getEventStatus(event.event_time)
-        const icon = status === 'past' ? redIcon : greenIcon
-
-        return (
-          <Marker
-            key={event.id}
-            position={[event.latitude, event.longitude]}
-            icon={icon}
-            eventHandlers={{
-              click: () => router.push(`/event/${event.id}`),
-            }}
-          >
-            <Popup>
-              <div className="space-y-2">
-                <div>
-                  <strong>{event.title}</strong>
-                  <p className="text-sm">{event.description}</p>
-                  <p className="text-xs text-gray-500">
-                    {event.location_name}
-                  </p>
-                </div>
-
-                {status !== 'past' && (
-                  <button
-                    onClick={() => toggleRsvp(event.id)}
-                    className="text-blue-600 text-sm"
-                  >
-                    {rsvps.includes(event.id)
-                      ? 'Cancel RSVP'
-                      : 'RSVP'}
-                  </button>
-                )}
-
-                {status === 'past' && (
-                  <p className="text-xs text-red-600">
-                    Event completed
-                  </p>
-                )}
-
-                {userId === event.creator_id && (
-                  <button
-                    onClick={() => deleteEvent(event.id)}
-                    className="text-red-600 text-sm block"
-                  >
-                    Delete
-                  </button>
-                )}
-
-                <button
-                  onClick={() =>
-                    router.push(`/event/${event.id}`)
-                  }
-                  className="text-green-600 text-sm block underline"
-                >
-                  View Details
-                </button>
+      {events.map((event) => (
+        <Marker
+          key={event.id}
+          position={[event.latitude, event.longitude]}
+          icon={icon}
+          eventHandlers={{
+            click: () => router.push(`/event/${event.id}`),
+          }}
+        >
+          <Popup>
+            <div className="space-y-2">
+              <div>
+                <strong>{event.title}</strong>
+                <p className="text-sm">{event.description}</p>
+                <p className="text-xs text-gray-500">
+                  {event.location_name}
+                </p>
               </div>
-            </Popup>
-          </Marker>
-        )
-      })}
+
+              <button
+                onClick={() => toggleRsvp(event.id)}
+                className="text-blue-600 text-sm"
+              >
+                {rsvps.includes(event.id) ? 'Cancel RSVP' : 'RSVP'}
+              </button>
+
+              {userId === event.creator_id && (
+                <button
+                  onClick={() => deleteEvent(event.id)}
+                  className="text-red-600 text-sm block"
+                >
+                  Delete
+                </button>
+              )}
+
+              <button
+                onClick={() => router.push(`/event/${event.id}`)}
+                className="text-green-600 text-sm block underline"
+              >
+                View Details
+              </button>
+            </div>
+          </Popup>
+        </Marker>
+      ))}
     </MapContainer>
   )
 }
