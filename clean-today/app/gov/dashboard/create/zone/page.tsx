@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import Navbar from '@/components/navbar/Navbar'
 import { supabase } from '@/lib/supabase'
 
-const CreateMap = dynamic(() => import('@/components/map/CreateMap'), {
+const ZoneMap = dynamic(() => import('@/components/map/ZoneMap'), {
   ssr: false,
 })
 
@@ -135,8 +135,8 @@ export default function CreateZonePage() {
         </div>
 
         <div className="hidden md:block w-1/2 border-l">
-          <CreateMap
-            onSelect={(coords) => setPolygon(coords as unknown as LatLng[])}
+          <ZoneMap
+            onChange={(points) => setPolygon(points)}
           />
         </div>
 
