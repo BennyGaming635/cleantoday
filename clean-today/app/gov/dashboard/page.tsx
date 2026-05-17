@@ -1,12 +1,19 @@
 'use client'
 
-import ReportWizard from '@/components/gov/ReportWizard'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Navbar from '@/components/navbar/Navbar'
 import { supabase } from '@/lib/supabase'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
+import booleanPointInPolygon from '@turf/boolean-point-in-polygon'
+import { point, polygon } from '@turf/helpers'
+import dyanmic from 'next/dynamic'
+
+const ReportWizard = dyanmic(
+  () => import('@/components/gov/ReportWizard'),
+  { ssr: false }
+)
 
 type GovUser = {
   username: string
@@ -21,6 +28,8 @@ type Event = {
   location_name: string
   completed: boolean
   kg_collected: number | null
+  latitude: number | null
+  longitude: number | null
 }
 
 export default function GovDashboard() {
@@ -45,7 +54,7 @@ export default function GovDashboard() {
       const { data } = await supabase
         .from('cleanup_events')
         .select(
-          'id, title, location_name, completed, kg_collected'
+          'id, title, location_name, completed, kg_collected, latitude, longitude'
         )
 
       if (data) setEvents(data)
@@ -70,7 +79,7 @@ export default function GovDashboard() {
     (e) => !e.completed
   ).length
 
-  const generateReport = () => {
+  const generateReport = (reportEvents: Event[]) => {
     const doc = new jsPDF()
     doc.setFontSize(22)
     doc.text(
@@ -86,15 +95,15 @@ export default function GovDashboard() {
       30
     )
 
-    doc.text(`Total Events: ${totalEvents}`, 14, 45)
-    doc.text(`Completed: ${completed}`, 14, 55)
-    doc.text(`Upcoming: ${upcoming}`, 14, 65)
-    doc.text(`Total Waste Collected: ${totalKg} kg`, 14, 75)
+    doc.text(`Total Events: ${reportEvents.length}`, 14, 45)
+    doc.text(`Completed: ${reportEvents.filter((e) => e.completed).length}`, 14, 55)
+    doc.text(`Upcoming: ${reportEvents.filter((e) => !e.completed).length}`, 14, 65)
+    doc.text(`Total Waste Collected: ${reportEvents.reduce((sum, e) => sum + (e.kg_collected || 0), 0)} kg`, 14, 75)
 
     autoTable(doc, {
       startY: 90,
       head: [['Title', 'Location', 'Status', 'KG']],
-      body: events.map((e) => [
+      body: reportEvents.map((e) => [
         e.title,
         e.location_name,
         e.completed ? 'Completed' : 'Upcoming',
@@ -218,9 +227,37 @@ export default function GovDashboard() {
         open={wizardOpen}
         onClose={() => setWizardOpen(false)}
         onGenerate={(data) => {
-          console.log(data)
-          generateReport()
-          setWizardOpen(false)
+          const coords = data.polygon.map((p) => [
+            p.lng,
+            p.lat,
+          ])
+
+          coords.push(coords[0])
+
+          const polygonCoords = [coords]
+
+          const turfPolygon = polygon(polygonCoords)
+          const filteredEvents = events.filter((event) => {
+            if (
+              event.latitude === null ||
+              event.longitude === null
+            ) {
+              return false
+            }
+
+            const eventPoint = point([
+              event.longitude,
+              event.latitude,
+            ])
+
+            return booleanPointInPolygon(
+              eventPoint,
+              turfPolygon
+            )
+        })
+        
+        generateReport(filteredEvents)
+        setWizardOpen(false)
         }}
         />
 
