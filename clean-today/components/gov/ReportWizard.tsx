@@ -88,7 +88,9 @@ export default function ReportWizard({ open, onClose, onGenerate }: Props) {
                                 Branding Options
                             </h3>
                             <p className="text-gray-600 text-sm">
-                                Customise the appearance of your report.
+                                Customise the appearance of your report
+                                Primary colours are for the background,
+                                Secondary colours are for the text.
                             </p>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
