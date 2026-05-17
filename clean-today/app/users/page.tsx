@@ -10,6 +10,7 @@ type Profile = {
   username: string
   avatar_url: string
   bio: string | null
+  is_public: boolean
 }
 
 export default function UsersPage() {
@@ -20,7 +21,8 @@ export default function UsersPage() {
     const load = async () => {
       const { data } = await supabase
         .from('profiles')
-        .select('id, username, avatar_url, bio')
+        .select('*')
+        .eq('is_public', true)
 
       setUsers(data || [])
       setLoading(false)

@@ -10,6 +10,7 @@ export default function ProfilePage() {
   const [username, setUsername] = useState('')
   const [bio, setBio] = useState('')
   const [avatarUrl, setAvatarUrl] = useState('')
+  const [isPublic, setIsPublic] = useState(true)
 
   useEffect(() => {
     const load = async () => {
@@ -70,7 +71,9 @@ export default function ProfilePage() {
         username,
         bio,
         avatar_url: avatarUrl,
+        is_public: isPublic,
       })
+      .eq('id', user.id)
 
     if (error) {
       alert(error.message)
