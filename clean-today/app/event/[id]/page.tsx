@@ -308,7 +308,7 @@ export default function EventPage() {
 
           {creator && (
             <div className="bg-white rounded-xl shadow p-6">
-              <h2 className="text-xl font-semibold mb-4">Organiser</h2>
+              <h2 className="text-xl font-semibold mb-4 text-gray-800">Organiser</h2>
 
               <div className="flex items-center gap-4">
                 <img
@@ -316,7 +316,7 @@ export default function EventPage() {
                   className="w-16 h-16 rounded-full border"
                 />
                 <div>
-                  <p className="font-semibold">{creator.username}</p>
+                  <p className="font-semibold text-gray-700">{creator.username}</p>
                   <p className="text-sm text-gray-500">{creator.bio}</p>
                 </div>
               </div>
