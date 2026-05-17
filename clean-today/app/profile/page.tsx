@@ -49,9 +49,10 @@ export default function ProfilePage() {
         setUsername(data.username || githubName)
         setBio(data.bio || '')
         setAvatarUrl(data.avatar_url || avatar)
-      }
+        setIsPublic(data.is_public ?? true)
 
       setLoading(false)
+      }
     }
 
     load()
@@ -73,7 +74,6 @@ export default function ProfilePage() {
         avatar_url: avatarUrl,
         is_public: isPublic,
       })
-      .eq('id', user.id)
 
     if (error) {
       alert(error.message)
@@ -137,6 +137,20 @@ export default function ProfilePage() {
                 className="w-full border p-3 rounded-lg text-gray-600"
                 rows={4}
                 placeholder="Tell people about yourself..."
+              />
+            </div>
+            <div className="flex items-center justify-between border p-3 rounded-lg bg-white">
+              <div>
+                <p className="font-medium text-gray-800">Public Profile</p>
+                <p className="text-sm text-gray-500">
+                  Allow your profile to appear in the <b>public</b> users directory?
+                </p>
+              </div>
+              <input
+                type="checkbox"
+                checked={isPublic}
+                onChange={(e) => setIsPublic(e.target.checked)}
+                className="w-5 h-5"
               />
             </div>
 
