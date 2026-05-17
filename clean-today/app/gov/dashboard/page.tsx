@@ -173,7 +173,7 @@ export default function GovDashboard() {
           {govUser?.council_name || ' Dashboard'}
         </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
 
           <div className="bg-white p-6 rounded-2xl border text-gray-800">
             <p>Total Events</p>
@@ -199,6 +199,15 @@ export default function GovDashboard() {
             <p>Create Event</p>
             <button
               onClick={() => router.push('/gov/dashboard/create')}
+              className="mt-2 bg-green-700 text-white px-4 py-2 rounded-lg"
+            >
+              New
+            </button>
+          </div>
+          <div className="bg-white p-6 rounded-2xl border text-gray-800">
+            <p>Clean Zone</p>
+            <button
+              onClick={() => router.push('/gov/dashboard/zone')}
               className="mt-2 bg-green-700 text-white px-4 py-2 rounded-lg"
             >
               New
