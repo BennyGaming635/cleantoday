@@ -80,6 +80,112 @@ export default function ReportWizard({ open, onClose, onGenerate }: Props) {
                         </MapContainer>
                     </div>
                 )}
+
+                {step === 2 && (
+                    <div className="space-y-6">
+                        <div>
+                            <h3 className="text-xl font-semibold">
+                                Branding Options
+                            </h3>
+                            <p className="text-gray-600 text-sm">
+                                Customise the appearance of your report.
+                            </p>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label className="block mb-2 font-medium">
+                                    Primary Colour
+                                </label>
+                                <input
+                                    type="color"
+                                    value={primaryColor}
+                                    onChange={(e) =>
+                                        setPrimaryColor(e.target.value)
+                                    }
+                                    className="w-full h-16 rounded-xl"
+                                />
+                            </div>
+                            <div>
+                                <label className="block mb-2 font-medium">
+                                    Secondary Colour
+                                </label>
+                                <input
+                                    type="color"
+                                    value={secondaryColor}
+                                    onChange={(e) =>
+                                        setSecondaryColor(e.target.value)
+                                    }
+                                    className="w-full h-16 rounded-xl"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {step === 3 && (
+                    <div className="space-y-6 text-center">
+                        <div>
+                            <h3 className="text-2xl font-bold">
+                                Ready to Generate!
+                            </h3>
+                            <p className="text-gray-600 mt-2">
+                                Click the button below to generate your report.
+                            </p>
+                        </div>
+                        <div className="flex-justify-center gap-4">
+                            <div
+                            className="w-20 h-20 rounded-2xl"
+                            style={{ backgroundColor: primaryColor }}
+                            />
+                            <div
+                            className="w-20 h-20 rounded-2xl"
+                            style={{ backgroundColor: secondaryColor }}
+                            />
+                        </div>
+                    </div>
+                )}
+
+                <div className="flex justify-between pt-4">
+                    <button
+                        onClick={onClose}
+                        className="px-5 py-3 rounded-xl border"
+                    >
+                        Cancel
+                    </button>
+                    <div className="flex gap-3">
+
+                        {step > 1 && (
+                            <button
+                                onClick={() => setStep(step - 1)}
+                                className="px-5 py-3 rounded-xl border"
+                            >
+                                Back
+                            </button>
+                        )}
+
+                        {step < 3 ? (
+                            <button
+                                onClick={() => setStep(step + 1)}
+                                className="bg-green-700 text-white px-5 py-3 rounded-xl"
+                            >
+                                Next
+                            </button>
+                        ) : (
+                            <button
+                                onClick={() =>
+                                onGenerate({
+                                    polygon,
+                                    primaryColor,
+                                    secondaryColor,
+                                })
+                                }
+                                className="bg-green-700 text-white px-5 py-3 rounded-xl"
+                            >
+                                Generate Report
+                            </button>
+                        )}
+                    </div>
+                </div>
             </div>
         </div>
     )
