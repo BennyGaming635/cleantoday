@@ -32,6 +32,7 @@ type Event = {
   longitude: number | null
   description?: string
   event_time?: string
+  council_username: string | null
 }
 
 export default function GovDashboard() {
@@ -58,7 +59,7 @@ export default function GovDashboard() {
       const { data } = await supabase
         .from('cleanup_events')
         .select(
-          'id, title, location_name, completed, kg_collected, latitude, longitude'
+          'id, title, location_name, completed, kg_collected, latitude, longitude, council_username'
         )
 
       if (data) setEvents(data)
@@ -76,6 +77,24 @@ export default function GovDashboard() {
   const totalEvents = events.length
   const completed = events.filter((e) => e.completed).length
   const upcoming = events.filter((e) => !e.completed).length
+
+  const deleteEvent = async (eventId: string) => {
+    const confirmed = confirm('Are you sure you want to delete this event?')
+    if (!confirmed || !govUser) return
+
+    const { error } = await supabase
+      .from('cleanup_events')
+      .delete()
+      .eq('id', eventId)
+      .eq('council_username', govUser.username)
+
+      if (error) {
+        alert('Failed to delete event. Please try again.')
+        return
+      }
+
+      setEvents((prev) => prev.filter((e) => e.id !== eventId))
+  }
 
   const generateReport = (
     reportEvents: Event[],
@@ -212,6 +231,14 @@ export default function GovDashboard() {
                   {e.kg_collected || 0} kg
                 </p>
               </div>
+              {e.council_username === govUser?.username && (
+              <button
+              onClick={() => deleteEvent(e.id)}
+              className="ml-4 text-red-600 hover:text-red-800"
+            >
+              Delete
+            </button>
+              )}
             </div>
           ))}
         </div>
