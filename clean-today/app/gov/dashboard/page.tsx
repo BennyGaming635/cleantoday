@@ -1,5 +1,6 @@
 'use client'
 
+import ReportWizard from '@/components/gov/ReportWizard'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Navbar from '@/components/navbar/Navbar'
@@ -24,6 +25,7 @@ type Event = {
 
 export default function GovDashboard() {
   const router = useRouter()
+  const [wizardOpen, setWizardOpen] = useState(false)
 
   const [govUser, setGovUser] = useState<GovUser | null>(() => {
     if (typeof window === 'undefined') return null
@@ -163,7 +165,7 @@ export default function GovDashboard() {
           <div className="bg-white border rounded-2xl p-6">
             <p className="text-gray-500">Generate Report</p>
             <button
-              onClick={generateReport}
+              onClick={() => setWizardOpen(true)}
               className="mt-2 bg-green-700 text-white px-4 py-2 rounded-lg"
             >
               Generate Report
@@ -212,6 +214,15 @@ export default function GovDashboard() {
             ))}
           </div>
         </div>
+        <ReportWizard
+        open={wizardOpen}
+        onClose={() => setWizardOpen(false)}
+        onGenerate={(data) => {
+          console.log(data)
+          generateReport()
+          setWizardOpen(false)
+        }}
+        />
 
       </div>
     </main>
