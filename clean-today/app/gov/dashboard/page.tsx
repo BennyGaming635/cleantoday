@@ -79,8 +79,15 @@ export default function GovDashboard() {
     (e) => !e.completed
   ).length
 
-  const generateReport = (reportEvents: Event[]) => {
+  const generateReport = (
+    reportEvents: Event[],
+    primaryColor: string,
+    secondaryColor: string
+  ) => {
     const doc = new jsPDF()
+    doc.setTextColor(secondaryColor)
+    doc.setFillColor(primaryColor)
+    doc.rect(0, 0, 230, 35, 'F')
     doc.setFontSize(22)
     doc.text(
       `${govUser?.council_name} Environmental Impact Report`,
@@ -103,6 +110,10 @@ export default function GovDashboard() {
     autoTable(doc, {
       startY: 90,
       head: [['Title', 'Location', 'Status', 'KG']],
+      headStyles: {
+        fillColor: primaryColor,
+        textColor: secondaryColor,
+      },
       body: reportEvents.map((e) => [
         e.title,
         e.location_name,
@@ -256,7 +267,11 @@ export default function GovDashboard() {
             )
         })
         
-        generateReport(filteredEvents)
+        generateReport(
+          filteredEvents,
+          data.primaryColor,
+          data.secondaryColor
+        )
         setWizardOpen(false)
         }}
         />
