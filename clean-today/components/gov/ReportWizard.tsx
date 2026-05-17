@@ -33,7 +33,7 @@ export default function ReportWizard({ open, onClose, onGenerate }: Props) {
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-6">
             <div className="bg-white rounded-3xl w-full max-w-4xl p-8 space-y-6">
                 <div>
-                    <h2 className="text-3xl font-bold">
+                    <h2 className="text-3xl font-bold text-gray-800">
                         Make a new Report
                     </h2>
                     <p className="text-gray-500 mt-2">
@@ -44,7 +44,7 @@ export default function ReportWizard({ open, onClose, onGenerate }: Props) {
                 {step === 1 && (
                     <div className="space-y-4">
                         <div>
-                            <h3 className="text-xl font-semibold">
+                            <h3 className="text-xl font-semibold text-gray-800">
                                 Select Report Area
                             </h3>
                             <p className="text-gray-600 mt-sm">
@@ -84,7 +84,7 @@ export default function ReportWizard({ open, onClose, onGenerate }: Props) {
                 {step === 2 && (
                     <div className="space-y-6">
                         <div>
-                            <h3 className="text-xl font-semibold">
+                            <h3 className="text-xl font-semibold text-gray-800">
                                 Branding Options
                             </h3>
                             <p className="text-gray-600 text-sm">
@@ -93,7 +93,7 @@ export default function ReportWizard({ open, onClose, onGenerate }: Props) {
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label className="block mb-2 font-medium">
+                                <label className="block mb-2 font-medium text-gray-600">
                                     Primary Colour
                                 </label>
                                 <input
@@ -106,7 +106,7 @@ export default function ReportWizard({ open, onClose, onGenerate }: Props) {
                                 />
                             </div>
                             <div>
-                                <label className="block mb-2 font-medium">
+                                <label className="block mb-2 font-medium text-gray-600">
                                     Secondary Colour
                                 </label>
                                 <input
@@ -125,14 +125,14 @@ export default function ReportWizard({ open, onClose, onGenerate }: Props) {
                 {step === 3 && (
                     <div className="space-y-6 text-center">
                         <div>
-                            <h3 className="text-2xl font-bold">
+                            <h3 className="text-2xl font-bold text-gray-800">
                                 Ready to Generate!
                             </h3>
                             <p className="text-gray-600 mt-2">
                                 Click the button below to generate your report.
                             </p>
                         </div>
-                        <div className="flex-justify-center gap-4">
+                        <div className="flex justify-center gap-4">
                             <div
                             className="w-20 h-20 rounded-2xl"
                             style={{ backgroundColor: primaryColor }}
@@ -148,7 +148,7 @@ export default function ReportWizard({ open, onClose, onGenerate }: Props) {
                 <div className="flex justify-between pt-4">
                     <button
                         onClick={onClose}
-                        className="px-5 py-3 rounded-xl border"
+                        className="px-5 py-3 rounded-xl border bg-red-700"
                     >
                         Cancel
                     </button>
@@ -157,7 +157,7 @@ export default function ReportWizard({ open, onClose, onGenerate }: Props) {
                         {step > 1 && (
                             <button
                                 onClick={() => setStep(step - 1)}
-                                className="px-5 py-3 rounded-xl border"
+                                className="px-5 py-3 rounded-xl border bg-blue-500"
                             >
                                 Back
                             </button>
