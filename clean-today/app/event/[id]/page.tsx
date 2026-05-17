@@ -10,12 +10,13 @@ type Event = {
   title: string
   description: string
   location_name: string
-  latitude: number
-  longitude: number
-  creator_id: string
+  latitude: number | null
+  longitude: number | null
+  creator_id: string | null
   event_time: string | null
   completed: boolean
-  kg_collected: number
+  kg_collected: number | null
+  council_username: string | null
 }
 
 type Profile = {
@@ -23,10 +24,6 @@ type Profile = {
   username: string
   avatar_url: string
   bio: string
-}
-
-type RSVP = {
-  user_id: string
 }
 
 type AttendeeProfile = {
@@ -90,11 +87,25 @@ export default function EventPage() {
 
     setEvent(eventData)
 
-    const { data: creatorData } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', eventData.creator_id)
-      .single()
+    let creatorData = null
+
+    if (eventData.creator_id) {
+      const { data } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', eventData.creator_id)
+        .single()
+
+      creatorData = data
+    } else if (eventData.council_username) {
+      const { data } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('username', eventData.council_username)
+        .single()
+
+      creatorData = data
+    }
 
     setCreator(creatorData)
 
@@ -103,9 +114,7 @@ export default function EventPage() {
       .select('user_id')
       .eq('event_id', eventId)
 
-    const attendeeIds =
-      rsvpData?.map((r: RSVP) => r.user_id) || []
-
+    const attendeeIds = rsvpData?.map((r) => r.user_id) || []
     setRsvps(attendeeIds)
 
     if (attendeeIds.length > 0) {
@@ -123,50 +132,42 @@ export default function EventPage() {
       .eq('event_id', eventId)
       .order('created_at', { ascending: false })
 
-    if (postsData && postsData.length > 0) {
-      const postUserIds = postsData.map(
-        (p) => p.user_id
-      )
+    if (postsData?.length) {
+      const userIds = postsData.map((p) => p.user_id)
 
       const { data: profileData } = await supabase
         .from('profiles')
         .select('id, username, avatar_url')
-        .in('id', postUserIds)
+        .in('id', userIds)
 
-      const mergedPosts = postsData.map((post) => ({
+      const merged = postsData.map((post) => ({
         ...post,
-        profile: profileData?.find(
-          (p) => p.id === post.user_id
-        ),
+        profile: profileData?.find((p) => p.id === post.user_id),
       }))
 
-      setPosts(mergedPosts)
+      setPosts(merged)
     }
 
     setLoading(false)
   }
 
   useEffect(() => {
-    const run = async () => {
-      await load()
-    }
-
-    void run()
+    (async () => {
+      try {
+        await load()
+      } catch (err) {
+        console.error(err)
+      }
+    })()
   }, [])
 
-  const isGoing = userId
-    ? rsvps.includes(userId)
-    : false
+  const isGoing = userId ? rsvps.includes(userId) : false
 
   const toggleRsvp = async () => {
-    if (!event) {
-      return
-    }
+    if (!event) return
 
-    if (event.completed) {
-      alert('This event has already been completed and can no longer be RSVPed to.')
-      return
-    }
+    if (event.completed) return
+
     if (!userId) {
       router.push('/login')
       return
@@ -179,13 +180,8 @@ export default function EventPage() {
         .eq('event_id', event.id)
         .eq('user_id', userId)
 
-      setRsvps((prev) =>
-        prev.filter((u) => u !== userId)
-      )
-
-      setAttendees((prev) =>
-        prev.filter((a) => a.id !== userId)
-      )
+      setRsvps((prev) => prev.filter((u) => u !== userId))
+      setAttendees((prev) => prev.filter((a) => a.id !== userId))
     } else {
       await supabase.from('event_rsvps').insert({
         event_id: event.id,
@@ -209,17 +205,10 @@ export default function EventPage() {
   const deleteEvent = async () => {
     if (!event) return
 
-    const confirmed = confirm(
-      'Delete this event?'
-    )
-
+    const confirmed = confirm('Delete this event?')
     if (!confirmed) return
 
-    await supabase
-      .from('cleanup_events')
-      .delete()
-      .eq('id', event.id)
-
+    await supabase.from('cleanup_events').delete().eq('id', event.id)
     router.push('/explore')
   }
 
@@ -229,10 +218,7 @@ export default function EventPage() {
       return
     }
 
-    if (!postContent.trim() && !imageFile) {
-      alert('Write something or upload an image')
-      return
-    }
+    if (!postContent.trim() && !imageFile) return
 
     setPosting(true)
 
@@ -240,94 +226,42 @@ export default function EventPage() {
       let imageUrl: string | null = null
 
       if (imageFile) {
-        const fileExt =
-          imageFile.name.split('.').pop()
+        const ext = imageFile.name.split('.').pop()
+        const fileName = `${crypto.randomUUID()}.${ext}`
 
-        const fileName = `${crypto.randomUUID()}.${fileExt}`
+        const { error } = await supabase.storage
+          .from('event-images')
+          .upload(fileName, imageFile)
 
-        const { error: uploadError } =
-          await supabase.storage
-            .from('event-images')
-            .upload(fileName, imageFile)
+        if (error) throw error
 
-        if (uploadError) {
-          console.error(uploadError)
-          alert(uploadError.message)
-          setPosting(false)
-          return
-        }
-
-        const {
-          data: { publicUrl },
-        } = supabase.storage
+        const { data } = supabase.storage
           .from('event-images')
           .getPublicUrl(fileName)
 
-        imageUrl = publicUrl
+        imageUrl = data.publicUrl
       }
 
-      const { error: insertError } =
-        await supabase
-          .from('event_posts')
-          .insert({
-            event_id: event.id,
-            user_id: userId,
-            content: postContent,
-            image_url: imageUrl,
-          })
-
-      if (insertError) {
-        console.error(insertError)
-        alert(insertError.message)
-        setPosting(false)
-        return
-      }
-
-      const { data: postsData } = await supabase
-        .from('event_posts')
-        .select('*')
-        .eq('event_id', event.id)
-        .order('created_at', {
-          ascending: false,
-        })
-
-      const userIds =
-        postsData?.map((p) => p.user_id) || []
-
-      const { data: profileData } =
-        await supabase
-          .from('profiles')
-          .select('id, username, avatar_url')
-          .in('id', userIds)
-
-      const mergedPosts =
-        postsData?.map((post) => ({
-          ...post,
-          profile: profileData?.find(
-            (p) => p.id === post.user_id
-          ),
-        })) || []
-
-      setPosts(mergedPosts)
+      await supabase.from('event_posts').insert({
+        event_id: event.id,
+        user_id: userId,
+        content: postContent,
+        image_url: imageUrl,
+      })
 
       setPostContent('')
       setImageFile(null)
-    } catch (err) {
-      console.error(err)
-      alert('Something went wrong')
+      await load()
+    } finally {
+      setPosting(false)
     }
-
-    setPosting(false)
   }
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
         <Navbar />
-
-        <div className="p-6">
-          Loading...
-        </div>
+        <div className="p-6">Loading...</div>
       </div>
     )
   }
@@ -336,10 +270,7 @@ export default function EventPage() {
     return (
       <div className="min-h-screen bg-gray-50">
         <Navbar />
-
-        <div className="p-6">
-          Event not found.
-        </div>
+        <div className="p-6">Event not found.</div>
       </div>
     )
   }
@@ -352,232 +283,144 @@ export default function EventPage() {
         <div className="max-w-4xl mx-auto space-y-6">
 
           <div className="bg-white rounded-xl shadow p-8 space-y-4">
-            <div>
-              <h1 className="text-4xl font-bold text-green-700">
-                {event.title}
-              </h1>
+            <h1 className="text-4xl font-bold text-green-700">
+              {event.title}
+            </h1>
 
-              <p className="text-gray-500 mt-2">
-                📍 {event.location_name}
-              </p>
-              <p className="text-gray-500 mt-2">
-                🕒 {event.event_time
-                  ? new Date(event.event_time).toLocaleString()
-                  : 'No time set'}
-              </p>
-            </div>
+            <p className="text-gray-500">📍 {event.location_name}</p>
 
-            <p className="text-gray-700 leading-relaxed">
-              {event.description}
+            <p className="text-gray-500">
+              🕒{' '}
+              {event.event_time
+                ? new Date(event.event_time).toLocaleString()
+                : 'No time set'}
+            </p>
+
+            <p className="text-gray-700">{event.description}</p>
+
+            <p className="text-sm text-gray-500">
+              Organised by:{' '}
+              {event.creator_id
+                ? 'User'
+                : event.council_username || 'Council'}
             </p>
           </div>
 
-          <div className="bg-white rounded-xl shadow p-6">
-            <h2 className="text-xl font-semibold mb-4 text-gray-800">
-              Organiser
-            </h2>
+          {creator && (
+            <div className="bg-white rounded-xl shadow p-6">
+              <h2 className="text-xl font-semibold mb-4">Organiser</h2>
 
-            {creator && (
-              <div className="flex items-center gap-4 text-gray-700">
+              <div className="flex items-center gap-4">
                 <img
                   src={creator.avatar_url}
-                  alt={creator.username}
-                  className="w-16 h-16 rounded-full border object-cover"
+                  className="w-16 h-16 rounded-full border"
                 />
-
                 <div>
-                  <h3 className="font-semibold text-lg">
-                    {creator.username}
-                  </h3>
-
-                  <p className="text-gray-500 text-sm">
-                    {creator.bio || 'No bio yet'}
-                  </p>
+                  <p className="font-semibold">{creator.username}</p>
+                  <p className="text-sm text-gray-500">{creator.bio}</p>
                 </div>
               </div>
-            )}
-          </div>
+            </div>
+          )}
 
-          <div className="bg-white rounded-xl shadow p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div className="bg-white rounded-xl shadow p-6 flex justify-between items-center">
             <p className="text-blue-600 font-medium">
-              {rsvps.length} RSVP
-              {rsvps.length !== 1 ? 's' : ''}
+              {rsvps.length} RSVP{rsvps.length !== 1 ? 's' : ''}
             </p>
 
             <div className="flex gap-3">
               <button
                 onClick={toggleRsvp}
-                disabled={event.completed}
-                className={`px-5 py-2 rounded-lg text-white transition ${
-                  event.completed
-                  ? 'bg-gray-400 cursor-not-allowed'
-                  : isGoing
-                  ? 'bg-gray-600 hover:bg-gray-700'
-                  : 'bg-blue-600 hover:bg-blue-700'
-                }`}
+                className="px-5 py-2 rounded-lg bg-blue-600 text-white"
               >
-                {event.completed
-                  ? 'Event Completed'
-                  : isGoing
-                  ? 'Cancel RSVP'
-                  : 'RSVP'}
+                {isGoing ? 'Cancel RSVP' : 'RSVP'}
               </button>
 
               {userId === event.creator_id && (
                 <button
                   onClick={deleteEvent}
-                  className="px-5 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white transition"
+                  className="px-5 py-2 rounded-lg bg-red-600 text-white"
                 >
-                  Delete Event
+                  Delete
                 </button>
               )}
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow p-6">
-            <h2 className="text-xl font-semibold mb-4 text-gray-800">
-              Location
-            </h2>
+          {event.latitude && event.longitude && (
+            <div className="bg-white rounded-xl shadow p-6">
+              <h2 className="text-xl font-semibold mb-4 text-gray-800">Location</h2>
 
-            <div className="w-full h-[400px] rounded-xl overflow-hidden border">
-              <iframe
-                width="100%"
-                height="100%"
-                loading="lazy"
-                src={`https://www.openstreetmap.org/export/embed.html?bbox=${
-                  event.longitude - 0.01
-                },${event.latitude - 0.01},${
-                  event.longitude + 0.01
-                },${event.latitude + 0.01}&layer=mapnik&marker=${
-                  event.latitude
-                },${event.longitude}`}
-              />
+              <div className="h-[400px] border rounded-xl overflow-hidden">
+                <iframe
+                  width="100%"
+                  height="100%"
+                  loading="lazy"
+                  src={`https://www.openstreetmap.org/export/embed.html?bbox=${
+                    event.longitude - 0.01
+                  },${event.latitude - 0.01},${
+                    event.longitude + 0.01
+                  },${event.latitude + 0.01}&layer=mapnik&marker=${
+                    event.latitude
+                  },${event.longitude}`}
+                />
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="bg-white rounded-xl shadow p-6">
-            <h2 className="text-xl font-semibold mb-4 text-gray-800">
-              Attendees
-            </h2>
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">Attendees</h2>
 
             {attendees.length === 0 ? (
-              <p className="text-gray-500">
-                No attendees yet.
-              </p>
+              <p className="text-gray-500">No attendees yet.</p>
             ) : (
-              <div className="flex flex-wrap gap-4">
-                {attendees.map((attendee) => (
+              <div className="flex flex-wrap gap-3">
+                {attendees.map((a) => (
                   <div
-                    key={attendee.id}
-                    className="flex items-center gap-3 bg-gray-50 border rounded-full pl-2 pr-4 py-2"
+                    key={a.id}
+                    className="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-full"
                   >
                     <img
-                      src={attendee.avatar_url}
-                      alt={attendee.username}
-                      className="w-10 h-10 rounded-full object-cover"
+                      src={a.avatar_url}
+                      className="w-8 h-8 rounded-full"
                     />
-
-                    <span className="text-sm font-medium text-gray-700">
-                      {attendee.username}
-                    </span>
+                    <span>{a.username}</span>
                   </div>
                 ))}
               </div>
             )}
           </div>
 
-          <div className="bg-white rounded-xl shadow p-6 space-y-6">
+          <div className="bg-white rounded-xl shadow p-6 space-y-4">
+            <h2 className="text-xl font-semibold text-gray-800">Community Posts</h2>
 
-            <div>
-              <h2 className="text-xl font-semibold text-gray-800">
-                Community Posts
-              </h2>
+            <textarea
+              className="w-full border p-3 rounded-lg"
+              value={postContent}
+              onChange={(e) => setPostContent(e.target.value)}
+              placeholder="Share something..."
+            />
 
-              <p className="text-gray-500 text-sm mt-1">
-                Share updates and cleanup photos
-              </p>
+            <button
+              onClick={createPost}
+              disabled={posting}
+              className="bg-green-600 text-white px-4 py-2 rounded-lg"
+            >
+              {posting ? 'Posting...' : 'Post'}
+            </button>
+
+            <div className="space-y-4">
+              {posts.map((p) => (
+                <div key={p.id} className="border p-4 rounded-lg">
+                  <p className="font-semibold">
+                    {p.profile?.username || 'User'}
+                  </p>
+                  <p className="text-gray-700">{p.content}</p>
+                </div>
+              ))}
             </div>
-
-            <div className="space-y-4 border rounded-xl p-4 bg-gray-50">
-
-              <textarea
-                value={postContent}
-                onChange={(e) =>
-                  setPostContent(e.target.value)
-                }
-                placeholder="Share something..."
-                className="w-full border rounded-lg p-3 min-h-[120px] text-gray-700"
-              />
-
-              <button
-                onClick={createPost}
-                disabled={posting}
-                className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg"
-              >
-                {posting
-                  ? 'Posting...'
-                  : 'Post'}
-              </button>
-            </div>
-
-            <div className="space-y-6">
-              {posts.length === 0 ? (
-                <p className="text-gray-500">
-                  No posts yet.
-                </p>
-              ) : (
-                posts.map((post) => (
-                  <div
-                    key={post.id}
-                    className="border rounded-xl p-5 space-y-4"
-                  >
-                    <div className="flex items-center gap-3">
-                      <img
-                        src={
-                          post.profile
-                            ?.avatar_url ||
-                          '/default-avatar.png'
-                        }
-                        alt={
-                          post.profile
-                            ?.username || 'User'
-                        }
-                        className="w-12 h-12 rounded-full object-cover"
-                      />
-
-                      <div>
-                        <p className="font-medium text-gray-800">
-                          {post.profile
-                            ?.username || 'User'}
-                        </p>
-
-                        <p className="text-xs text-gray-500">
-                          {new Date(
-                            post.created_at
-                          ).toLocaleString()}
-                        </p>
-                      </div>
-                    </div>
-
-                    {post.content && (
-                      <p className="text-gray-700 whitespace-pre-wrap">
-                        {post.content}
-                      </p>
-                    )}
-
-                    {post.image_url && (
-                      <img
-                        src={post.image_url}
-                        alt="Post"
-                        className="rounded-xl border max-h-[500px] w-full object-cover"
-                      />
-                    )}
-                  </div>
-                ))
-              )}
-            </div>
-
           </div>
+
         </div>
       </div>
     </div>
