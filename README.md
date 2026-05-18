@@ -1,1 +1,22 @@
-# cleantoday
+# Clean Today!
+Welcome to Clean Today. This project is entirely open source so anyone can submit a change to the platform.
+Anyways this project relies heavily on Supabase to operate as our backend, as an SQlite database.
+
+## What is Clean Today?
+Clean Today is a platform primarily meant as a project for [Blue Minds Academy](https://blueminds.org.au/pages/academy) but it can also be used by the public (as that's its primary purpose). Anyways users are able to discover and host events in their local communities to help combat the large levels of rubbish and pollution around them. Plus councils are able to access reports in their areas, plus declare zones which require attention and that events should be scheduled for there. Plus the more waste that's collected and disposed of properly, the better rewards the community will get (avaliable on [Clean Today](https://cleantoday.vercel.app/milestones)).
+
+## What features are in Clean Today?
+In Clean Today, you are able to do many things, but the focus is again, on events. But you're able to do the following:
+- Log in with GitHub or Google (omg yes i know no email/password (i could not be bothered to add support for this))
+- Create events
+- Explore all events on an map
+- RSVP to events
+- See community stats/milestones
+
+For councils, they have access to the above features but can also:
+- See all events easily
+- Create reports for the required areas
+- Declare zones for attention
+
+## How can I submit changes?
+Well make a branch, make your changes, a PR showing it works and I'll consider merging it (yes very simple I know).
