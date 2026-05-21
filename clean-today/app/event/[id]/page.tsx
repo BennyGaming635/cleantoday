@@ -287,9 +287,9 @@ export default function EventPage() {
             <h1 className="text-4xl font-bold text-green-700 flex items-center gap-2">
               {event.title}
 
-              {event.council_username && (
+              {isCouncilEvent && (
                 <img
-                  src="badge.svg"
+                  src="/badge.svg"
                   alt="Council Event"
                   className="w-5 h-5"
                 />
