@@ -289,7 +289,7 @@ export default function EventPage() {
 
               {event.council_username && (
                 <img
-                  src="/badge.svg"
+                  src="badge.svg"
                   alt="Council Event"
                   className="w-5 h-5"
                 />
