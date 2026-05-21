@@ -291,7 +291,7 @@ export default function EventPage() {
                 <img
                   src="/badge.svg"
                   alt="Council Event"
-                  className="w-5 h-5"
+                  className="w-8 h-8"
                 />
               )}
             </h1>
