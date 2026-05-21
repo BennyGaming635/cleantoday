@@ -285,14 +285,14 @@ export default function EventPage() {
         <div className="max-w-4xl mx-auto space-y-6">
 
           <div className="bg-white rounded-xl shadow p-8 space-y-4">
-            <h1 className="text-4xl font-bold text-green-700 flex items-center gap-3">
+            <h1 className="text-4xl font-bold text-green-700 flex items-center gap-2">
               {event.title}
 
               {event.council_username && (
                 <img
                   src="/badge.svg"
                   alt="Council Event"
-                  className="w-5 h-5 inline-block ml-2"
+                  className="w-5 h-5"
                 />
               )}
             </h1>
