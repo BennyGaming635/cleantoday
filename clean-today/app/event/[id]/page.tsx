@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Navbar from '@/components/navbar/Navbar'
+import Image from 'next/image'
 import { supabase } from '@/lib/supabase'
 
 type Event = {
@@ -61,7 +62,7 @@ export default function EventPage() {
   const [posts, setPosts] = useState<EventPost[]>([])
   const [postContent, setPostContent] = useState('')
   const [imageFile, setImageFile] = useState<File | null>(null)
-
+  const isCouncilEvent = !!event?.council_username && event.council_username.length > 0
   const [loading, setLoading] = useState(true)
   const [posting, setPosting] = useState(false)
 
@@ -283,8 +284,16 @@ export default function EventPage() {
         <div className="max-w-4xl mx-auto space-y-6">
 
           <div className="bg-white rounded-xl shadow p-8 space-y-4">
-            <h1 className="text-4xl font-bold text-green-700">
+            <h1 className="text-4xl font-bold text-green-700 flex items-center gap-2">
               {event.title}
+
+              {isCouncilEvent && (
+                <img
+                  src="/badge.svg"
+                  alt="Council Event"
+                  className="w-8 h-8"
+                />
+              )}
             </h1>
 
             <p className="text-gray-500">📍 {event.location_name}</p>
