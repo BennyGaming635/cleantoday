@@ -62,8 +62,7 @@ export default function EventPage() {
   const [posts, setPosts] = useState<EventPost[]>([])
   const [postContent, setPostContent] = useState('')
   const [imageFile, setImageFile] = useState<File | null>(null)
-  const isCouncilEvent = (event: Event) => !!event.council_username
-
+  const isCouncilEvent = !!event?.council_username && event.council_username.length > 0
   const [loading, setLoading] = useState(true)
   const [posting, setPosting] = useState(false)
 
