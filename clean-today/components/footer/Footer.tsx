@@ -6,7 +6,7 @@ export default function Footer() {
     return (
         <footer className="bg-white mt-24">
             <div className="max-w-7xl mx-auto px-6 py-10 bg-white">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-10">
 
                     <div>
                         <h3 className="text-sm font-semibold text-gray-900 mb-4">
@@ -46,6 +46,15 @@ export default function Footer() {
                             <Link href="/admin">Dashboard</Link>
                         </div>
                     </div>
+                    <div>
+                        <h3 className="text-sm font-semibold text-gray-900 mb-4">
+                            Legal
+                        </h3>
+                        <div className="flex flex-col gap-2 text-sm text-gray-600">
+                            <Link href="/terms">Terms & Conditions</Link>
+                            <Link href="/privacy">Privacy Policy</Link>
+                        </div>
+                    </div>
                 </div>
                 <div className="border-t mt-10 pt-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <p className="text-sm text-gray-500">
@@ -58,6 +67,8 @@ export default function Footer() {
                     <Link href="/explore">Explore</Link>
                     <Link href="/gov">Government</Link>
                     <Link href="/users">Users</Link>
+                    <Link href="/terms">Terms & Conditions</Link>
+                    <Link href="/privacy">Privacy Policy</Link>
                 </div>
             </div>
             </div>
