@@ -18,6 +18,8 @@ export default function CreatePage() {
   const [locationName, setLocationName] = useState('')
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null)
   const [loading, setLoading] = useState(false)
+  const [showRules, setShowRules] = useState(false)
+  const [agreed, setAgreed] = useState(false)
 
   const createEvent = async () => {
     if (!title || !description || !locationName || !coords) return
@@ -104,7 +106,7 @@ export default function CreatePage() {
               </div>
 
               <button
-                onClick={createEvent}
+                onClick={() => setShowRules(true)}
                 disabled={loading}
                 className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg transition"
               >
