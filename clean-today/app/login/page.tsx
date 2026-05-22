@@ -77,7 +77,8 @@ export default function LoginPage() {
               </button>
 
             <p className="text-xs text-gray-400 text-center">
-              By continuing, you agree to the <a href="/terms" className="text-green-600 hover:underline">Terms of Service</a>and <a href="/privacy" className="text-green-600 hover:underline">Privacy Policy</a>.
+              By continuing, you agree to the <a href="/terms" className="text-green-600 hover:underline"> Terms of Service</a> and <a href="/privacy" className="text-green-600 hover:underline">Privacy Policy</a>.
+              You also acknowledge that you are at least 13 years of age.
             </p>
           </div>
         </div>
