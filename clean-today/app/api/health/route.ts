@@ -18,11 +18,14 @@ export async function GET() {
       )
     }
 
-    return NextResponse.json({
-      status: 'ok',
-      database: 'connected',
-      timestamp: new Date().toISOString(),
-    })
+    return NextResponse.json(
+      {
+        status: 'ok',
+        database: 'connected',
+        timestamp: new Date().toISOString(),
+      },
+      { status: 200 }
+    )
   } catch {
     return NextResponse.json(
       {
