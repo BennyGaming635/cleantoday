@@ -58,8 +58,8 @@ export default function CreatePage() {
     <div className="h-screen flex flex-col bg-gray-50">
       <Navbar />
 
-      <div className="flex flex-1 overflow-hidden">
-        <div className="w-full md:w-1/2 p-8 overflow-y-auto">
+      <div className="flex flex-1">
+        <div className="w-full md:w-1/2 p-8">
           <div className="max-w-xl mx-auto space-y-6">
             <div>
               <h1 className="text-3xl font-bold text-green-700">
@@ -168,7 +168,7 @@ export default function CreatePage() {
                   setShowRules(false)
                   setAgreed(false)
                 }}
-                className="px-4 py-2 rounded-lg border"
+                className="px-4 py-2 rounded-lg border bg-red-700 text-white"
               >
                 Cancel
               </button>
