@@ -53,6 +53,7 @@ export default function Footer() {
                         <div className="flex flex-col gap-2 text-sm text-gray-600">
                             <Link href="/terms">Terms & Conditions</Link>
                             <Link href="/privacy">Privacy Policy</Link>
+                            <Link href="/safety">Safety Guidelines</Link>
                         </div>
                     </div>
                 </div>
@@ -65,10 +66,8 @@ export default function Footer() {
                 <div className="flex flex-wrap gap-4 text-sm text-gray-500">
                     <Link href="/">Home</Link>
                     <Link href="/explore">Explore</Link>
-                    <Link href="/gov">Government</Link>
+                    <Link href="/status">Status</Link>
                     <Link href="/users">Users</Link>
-                    <Link href="/terms">Terms & Conditions</Link>
-                    <Link href="/privacy">Privacy Policy</Link>
                 </div>
             </div>
             </div>
