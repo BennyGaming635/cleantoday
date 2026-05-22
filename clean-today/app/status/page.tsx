@@ -17,7 +17,7 @@ export default function StatusPage() {
                 </div>
                 <div className="bg-white border rounded-3xl overflow-hidden shadow-sm">
                     <iframe
-                        src="https://status.cleantoday.app/embed/1m9j8l5n2x6y"
+                        src="https://cleantoday.betteruptime.com/"
                         className="w-full h-[900px]"
                     />
                 </div>
