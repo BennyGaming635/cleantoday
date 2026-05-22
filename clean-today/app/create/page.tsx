@@ -120,6 +120,78 @@ export default function CreatePage() {
           <CreateMap onSelect={setCoords} />
         </div>
       </div>
+      {showRules && (
+        <div className="fixed inset-0 z-[2000] bg-black/50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 space-y-5 shadow-2xl">
+
+            <div>
+              <h2 className="text-2xl font-bold text-gray-700">
+                Safety is Our Priority
+              </h2>
+
+              <p className="text-sm text-gray-500 mt-1">
+                You must agree before creating an event.
+              </p>
+            </div>
+
+            <div className="space-y-3 text-sm text-gray-700 max-h-[300px] overflow-y-auto">
+              <p>• Do not organise unsafe or dangerous activities</p>
+              <p>• Respect local laws and council regulations</p>
+              <p>• Do not trespass on private property</p>
+              <p>• Ensure participants have safe access to the area</p>
+              <p>• Do not include misleading or false information</p>
+              <p>• Keep events environmentally focused</p>
+              <p>
+                • Children under 13 <b>MUST NOT</b> create events
+              </p>
+              <p>
+                • Clean Today may remove events that violate our guidelines
+              </p>
+            </div>
+
+            <label className="flex items-start gap-3 text-sm text-gray-700">
+              <input
+                type="checkbox"
+                checked={agreed}
+                onChange={(e) => setAgreed(e.target.checked)}
+                className="mt-1"
+              />
+
+              <span>
+                I agree to the safety guidelines
+              </span>
+            </label>
+
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => {
+                  setShowRules(false)
+                  setAgreed(false)
+                }}
+                className="px-4 py-2 rounded-lg border"
+              >
+                Cancel
+              </button>
+
+              <button
+                disabled={!agreed || loading}
+                onClick={async () => {
+                  await createEvent()
+                  setShowRules(false)
+                }}
+                className={`px-4 py-2 rounded-lg text-white ${
+                  agreed
+                    ? 'bg-green-600 hover:bg-green-700'
+                    : 'bg-gray-400 cursor-not-allowed'
+                }`}
+              >
+                Continue
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
     </div>
   )
 }
