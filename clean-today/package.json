@@ -12,6 +12,7 @@
     "@heroui/react": "^3.0.4",
     "@supabase/supabase-js": "^2.105.4",
     "@turf/turf": "^7.3.5",
+    "@vercel/og": "^0.11.1",
     "clsx": "^2.1.1",
     "jspdf": "^4.2.1",
     "jspdf-autotable": "^5.0.7",
