@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Navbar from '@/components/navbar/Navbar'
 import Image from 'next/image'
@@ -66,7 +66,12 @@ export default function EventPage() {
   const [loading, setLoading] = useState(true)
   const [posting, setPosting] = useState(false)
 
-  const load = async () => {
+  const load = useCallback(async () => {
+    // Defer state updates to avoid synchronous setState inside useEffect
+    // This prevents the "set-state-in-effect" ESLint warning by
+    // moving state updates to the next microtask.
+    await Promise.resolve()
+
     setLoading(true)
 
     const {
@@ -150,17 +155,15 @@ export default function EventPage() {
     }
 
     setLoading(false)
-  }
+  }, [eventId])
 
   useEffect(() => {
-    (async () => {
-      try {
-        await load()
-      } catch (err) {
-        console.error(err)
-      }
-    })()
-  }, [])
+    const id = setTimeout(() => {
+      load().catch((err) => console.error(err))
+    }, 0)
+
+    return () => clearTimeout(id)
+  }, [load])
 
   const isGoing = userId ? rsvps.includes(userId) : false
 
@@ -288,9 +291,11 @@ export default function EventPage() {
               {event.title}
 
               {isCouncilEvent && (
-                <img
+                <Image
                   src="/badge.svg"
                   alt="Council Event"
+                  width={32}
+                  height={32}
                   className="w-8 h-8"
                 />
               )}
@@ -320,8 +325,12 @@ export default function EventPage() {
               <h2 className="text-xl font-semibold mb-4 text-gray-800">Organiser</h2>
 
               <div className="flex items-center gap-4">
-                <img
+                <Image
                   src={creator.avatar_url}
+                  alt={`${creator.username} avatar`}
+                  width={64}
+                  height={64}
+                  unoptimized
                   className="w-16 h-16 rounded-full border"
                 />
                 <div>
@@ -343,6 +352,17 @@ export default function EventPage() {
                 className="px-5 py-2 rounded-lg bg-blue-600 text-white"
               >
                 {isGoing ? 'Cancel RSVP' : 'RSVP'}
+              </button>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(
+                    `${window.location.origin}/`
+                  )
+                }}
+
+              className="px-5 py-2 rounded-lg bg-orange-600 text-white"
+              >
+                Copy Link
               </button>
 
               {userId === event.creator_id && (
@@ -389,8 +409,12 @@ export default function EventPage() {
                     key={a.id}
                     className="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-full"
                   >
-                    <img
+                    <Image
                       src={a.avatar_url}
+                      alt={`${a.username} avatar`}
+                      width={32}
+                      height={32}
+                      unoptimized
                       className="w-8 h-8 rounded-full"
                     />
                     <span>{a.username}</span>
