@@ -20,3 +20,6 @@ For councils, they have access to the above features but can also:
 
 ## How can I submit changes?
 Well make a branch, make your changes, a PR showing it works and I'll consider merging it (yes very simple I know).
+
+## For Horizons people (staff or whatever)
+If you're looking for my Lapse recording links, you're in the wrong place. Please check [here instead](LAPSE.md).
