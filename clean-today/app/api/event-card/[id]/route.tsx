@@ -38,162 +38,123 @@ export async function GET(
     organiser = data
   } else if (event.council_username) {
     const { data } = await supabase
-    .from('gov_accounts')
-    .select('username, avatar_url')
-    .eq('username', event.council_username)
-    .single()
+      .from('gov_accounts')
+      .select('username, avatar_url')
+      .eq('username', event.council_username)
+      .single()
     organiser = data
   }
 
- return new ImageResponse(
-  (
-    <div
-      style={{
-        width: '100%',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 60,
-        background: 'linear-gradient(135deg, #16a34a, #14532d)',
-        color: 'white',
-        fontFamily: 'sans-serif',
-      }}
-    >
+  return new ImageResponse(
+    (
       <div
         style={{
+          width: '100%',
+          height: '100%',
           display: 'flex',
-          flexDirection: 'column',
-          flex: 1,
-          paddingRight: 40,
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: 60,
+          background: 'linear-gradient(135deg, #16a34a, #14532d)',
+          color: 'white',
+          fontFamily: 'sans-serif',
         }}
       >
-        {isCouncil && (
-          <div
-            style={{
-              position: 'absolute',
-              top: 40,
-              right: 40,
-              fontSize: 28,
-              background: 'rgba(255,255,255,0.2)',
-              padding: '10px 16px',
-              borderRadius: 12,
-            }}
-          >
-            Council Event
-          </div>
-        )}
-
-        <div style={{ fontSize: 64, fontWeight: 800 }}>
-          {event.title}
-        </div>
-
-        <div style={{ fontSize: 32, marginTop: 20, opacity: 0.9 }}>
-          {`📍 ${event.location_name}`}
-        </div>
-
-        <div style={{ fontSize: 28, marginTop: 10, opacity: 0.8 }}>
-          {event.event_time
-            ? `🕒 ${new Date(event.event_time).toLocaleString()}`
-            : '🕒 No time set'}
-        </div>
-
-        <div style={{ fontSize: 28, marginTop: 30 }}>
-          {event.description?.slice(0, 120)}
-        </div>
-
-        {organiser && (
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 16,
-              marginTop: 40,
-            }}
-          >
-            <img
-              src={organiser.avatar_url}
-              alt={organiser.username}
-              width={80}
-              height={80}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            flex: 1,
+            paddingRight: 40,
+          }}
+        >
+          {isCouncil && (
+            <div
               style={{
-                borderRadius: '9999px',
-                objectFit: 'cover',
-                border: '3px solid white',
+                position: 'absolute',
+                top: 40,
+                right: 40,
+                fontSize: 28,
+                background: 'rgba(255,255,255,0.2)',
+                padding: '10px 16px',
+                borderRadius: 12,
               }}
-            />
+            >
+              Council Event
+            </div>
+          )}
 
+          <div style={{ fontSize: 64, fontWeight: 800 }}>{event.title}</div>
+
+          <div style={{ fontSize: 32, marginTop: 20, opacity: 0.9 }}>
+            {`📍 ${event.location_name}`}
+          </div>
+
+          <div style={{ fontSize: 28, marginTop: 10, opacity: 0.8 }}>
+            {event.event_time
+              ? `🕒 ${new Date(event.event_time).toLocaleString()}`
+              : '🕒 No time set'}
+          </div>
+
+          <div style={{ fontSize: 28, marginTop: 30 }}>
+            {event.description?.slice(0, 120)}
+          </div>
+
+          {organiser && (
             <div
               style={{
                 display: 'flex',
-                flexDirection: 'column',
+                alignItems: 'center',
+                gap: 16,
+                marginTop: 40,
               }}
             >
-              <div
+              <img
+                src={organiser.avatar_url}
+                alt={organiser.username}
+                width={80}
+                height={80}
                 style={{
-                  fontSize: 20,
-                  opacity: 0.8,
+                  borderRadius: '9999px',
+                  objectFit: 'cover',
+                  border: '3px solid white',
                 }}
-              >
-                Organised by
-              </div>
+              />
 
-              <div
-                style={{
-                  fontSize: 28,
-                  fontWeight: 700,
-                }}
-              >
-                {organiser.username}
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <div style={{ fontSize: 20, opacity: 0.8 }}>Organised by</div>
+
+                <div style={{ fontSize: 28, fontWeight: 700 }}>
+                  {organiser.username}
+                </div>
               </div>
             </div>
+          )}
+
+          <div style={{ marginTop: 50, fontSize: 24, opacity: 0.8 }}>
+            Clean Today • Join a cleanup near you
           </div>
-        )}
-
-        <div style={{ marginTop: 50, fontSize: 24, opacity: 0.8 }}>
-          Clean Today • Join a cleanup near you
         </div>
-      </div>
 
-      {(event.latitude && event.longitude) && (
         <div
           style={{
             width: 420,
             height: 420,
             borderRadius: 28,
-            background: 'radial-gradient(circle at center, #22c55e, #14532d)',
-            position: 'relative',
+            overflow: 'hidden',
+            border: '4px solid rgba(255,255,255,0.25)',
+            boxShadow: '0 20px 50px rgba(0,0,0,0.25)',
             display: 'flex',
           }}
         >
-          <div
-            style={{
-              position: 'absolute',
-              left: '50%',
-              top: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: 16,
-              height: 16,
-              borderRadius: 999,
-              background: 'red',
-              border: '3px solid white',
-            }}
+          <img
+            src={`${process.env.NEXT_PUBLIC_SITE_URL || ''}/colouri.png`}
+            width={420}
+            height={420}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
           />
-
-          <div
-            style={{
-              position: 'absolute',
-              bottom: 20,
-              left: 20,
-              fontSize: 20,
-              opacity: 0.9,
-            }}
-          >
-            Map View
-          </div>
         </div>
-      )}
       </div>
     ),
     {
