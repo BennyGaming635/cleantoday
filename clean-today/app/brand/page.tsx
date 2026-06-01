@@ -20,17 +20,31 @@ export default function BrandPage() {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <BrandCard title="Primary Logo (Light)">
+            <BrandCard title="Black/White Logo (Light)">
               <img
                 src="/brand/logo-bw.png"
                 className="w-full max-h-40 object-contain"
               />
             </BrandCard>
 
-            <BrandCard title="Primary Logo (Inverse)">
+            <BrandCard title="Black/White Logo (Inverse)">
               <img
                 src="/brand/logo-bwi.png"
                 className="w-full max-h-40 object-contain bg-black p-6 rounded-lg"
+              />
+            </BrandCard>
+            
+            <BrandCard title="Primary Logo (Light)">
+              <img
+                src="/brand/logo-c.png"
+                className="w-full max-h-40 object-contain"
+              />
+            </BrandCard>
+
+            <BrandCard title="Secondary Logo (Inverse)">
+              <img
+                src="/brand/logo-ci.png"
+                className="w-full max-h-40 object-contain p-6 rounded-lg bg-gradient-to-b from-[#169f48] to-[#14532d]"
               />
             </BrandCard>
           </div>
