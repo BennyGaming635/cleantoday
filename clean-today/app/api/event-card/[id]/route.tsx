@@ -114,8 +114,8 @@ export async function GET(
               <img
                 src={organiser.avatar_url}
                 alt={organiser.username}
-                width={80}
-                height={80}
+                width={40}
+                height={40}
                 style={{
                   borderRadius: '9999px',
                   objectFit: 'cover',
@@ -140,9 +140,9 @@ export async function GET(
 
         <div
           style={{
-            width: 420,
-            height: 420,
-            borderRadius: 28,
+            width: 210,
+            height: 210,
+            borderRadius: 14,
             overflow: 'hidden',
             border: '4px solid rgba(255,255,255,0.25)',
             boxShadow: '0 20px 50px rgba(0,0,0,0.25)',
@@ -151,8 +151,9 @@ export async function GET(
         >
           <img
             src={`${origin}/colouri.png`}
-            width={420}
-            height={420}
+            alt="colouri preview"
+            width={210}
+            height={210}
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
           />
         </div>
