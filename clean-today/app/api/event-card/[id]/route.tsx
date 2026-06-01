@@ -45,6 +45,11 @@ export async function GET(
     organiser = data
   }
 
+  const mapUrl =
+    event.latitude && event.longitude
+      ? `https://staticmap.openstreetmap.de/staticmap.php?center=${event.latitude},${event.longitude}&zoom=15&size=400x400&markers=${event.latitude},${event.longitude},red-pushpin`
+      : null
+
  return new ImageResponse(
   (
     <div
@@ -52,14 +57,23 @@ export async function GET(
         width: '100%',
         height: '100%',
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: 'row',
         justifyContent: 'center',
+        alignItems: 'center',
         padding: 60,
         background: 'linear-gradient(135deg, #16a34a, #14532d)',
         color: 'white',
         fontFamily: 'sans-serif',
       }}
     >
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          flex: 1,
+          paddingRight: 40,
+        }}
+      >
         {isCouncil && (
           <div
             style={{
@@ -145,6 +159,35 @@ export async function GET(
         <div style={{ marginTop: 50, fontSize: 24, opacity: 0.8 }}>
           Clean Today • Join a cleanup near you
         </div>
+      </div>
+
+      {mapUrl && (
+        <div
+          style={{
+            width: 420,
+            height: 420,
+            borderRadius: 28,
+            overflow: 'hidden',
+            background: 'rgba(255,255,255,0.12)',
+            border: '4px solid rgba(255,255,255,0.25)',
+            boxShadow: '0 20px 50px rgba(0,0,0,0.25)',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          <img
+            src={mapUrl}
+            alt="Event location map"
+            width={420}
+            height={420}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+            }}
+          />
+        </div>
+      )}
       </div>
     ),
     {
