@@ -349,18 +349,17 @@ export default function EventPage() {
             <div className="flex gap-3">
               <button
                 onClick={toggleRsvp}
-                className="px-5 py-2 rounded-lg bg-blue-600 text-white"
+                className="px-5 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
               >
                 {isGoing ? 'Cancel RSVP' : 'RSVP'}
               </button>
               <button
                 onClick={() => {
                   navigator.clipboard.writeText(
-                    `${window.location.origin}/`
+                    `${window.location.origin}/api/event-card/${event.id}`
                   )
                 }}
-
-              className="px-5 py-2 rounded-lg bg-orange-600 text-white"
+                className="px-5 py-2 rounded-lg bg-orange-600 text-white hover:bg-orange-700 transition"
               >
                 Copy Link
               </button>
@@ -368,7 +367,7 @@ export default function EventPage() {
               {userId === event.creator_id && (
                 <button
                   onClick={deleteEvent}
-                  className="px-5 py-2 rounded-lg bg-red-600 text-white"
+                  className="px-5 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition"
                 >
                   Delete
                 </button>
@@ -437,7 +436,7 @@ export default function EventPage() {
             <button
               onClick={createPost}
               disabled={posting}
-              className="bg-green-600 text-white px-4 py-2 rounded-lg"
+              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
             >
               {posting ? 'Posting...' : 'Post'}
             </button>
