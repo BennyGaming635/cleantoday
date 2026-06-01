@@ -14,6 +14,7 @@ export async function GET(
   context: { params: Promise<{ id: string }> }
 ) {
   const { id } = await context.params
+  const origin = req.nextUrl.origin
 
   const { data: event } = await supabase
     .from('cleanup_events')
@@ -149,7 +150,7 @@ export async function GET(
           }}
         >
           <img
-            src={`${process.env.NEXT_PUBLIC_SITE_URL || ''}/colouri.png`}
+            src={`${origin}/colouri.png`}
             width={420}
             height={420}
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
