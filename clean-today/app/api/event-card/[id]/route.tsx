@@ -27,6 +27,24 @@ export async function GET(
 
   const isCouncil = !!event.council_username
 
+  let organiser = null
+
+  if (event.creator_id) {
+    const { data } = await supabase
+      .from('profiles')
+      .select('username, avatar_url')
+      .eq('id', event.creator_id)
+      .single()
+    organiser = data
+  } else if (event.council_username) {
+    const { data } = await supabase
+    .from('gov_accounts')
+    .select('username, avatar_url')
+    .eq('username', event.council_username)
+    .single()
+    organiser = data
+  }
+
  return new ImageResponse(
   (
     <div
@@ -75,6 +93,54 @@ export async function GET(
         <div style={{ fontSize: 28, marginTop: 30 }}>
           {event.description?.slice(0, 120)}
         </div>
+
+        {organiser && (
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 16,
+              marginTop: 40,
+            }}
+          >
+            <img
+              src={organiser.avatar_url}
+              alt={organiser.username}
+              width={80}
+              height={80}
+              style={{
+                borderRadius: '9999px',
+                objectFit: 'cover',
+                border: '3px solid white',
+              }}
+            />
+
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              <div
+                style={{
+                  fontSize: 20,
+                  opacity: 0.8,
+                }}
+              >
+                Organised by
+              </div>
+
+              <div
+                style={{
+                  fontSize: 28,
+                  fontWeight: 700,
+                }}
+              >
+                {organiser.username}
+              </div>
+            </div>
+          </div>
+        )}
 
         <div style={{ marginTop: 50, fontSize: 24, opacity: 0.8 }}>
           Clean Today • Join a cleanup near you
