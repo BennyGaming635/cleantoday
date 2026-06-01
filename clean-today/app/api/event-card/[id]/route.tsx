@@ -45,11 +45,6 @@ export async function GET(
     organiser = data
   }
 
-  const mapUrl =
-    event.latitude && event.longitude
-      ? `https://staticmap.openstreetmap.de/staticmap.php?center=${event.latitude},${event.longitude}&zoom=15&size=400x400&markers=${event.latitude},${event.longitude},red-pushpin`
-      : null
-
  return new ImageResponse(
   (
     <div
@@ -161,31 +156,42 @@ export async function GET(
         </div>
       </div>
 
-      {mapUrl && (
+      {(event.latitude && event.longitude) && (
         <div
           style={{
             width: 420,
             height: 420,
             borderRadius: 28,
-            overflow: 'hidden',
-            background: 'rgba(255,255,255,0.12)',
-            border: '4px solid rgba(255,255,255,0.25)',
-            boxShadow: '0 20px 50px rgba(0,0,0,0.25)',
+            background: 'radial-gradient(circle at center, #22c55e, #14532d)',
+            position: 'relative',
             display: 'flex',
-            flexDirection: 'column',
           }}
         >
-          <img
-            src={mapUrl}
-            alt="Event location map"
-            width={420}
-            height={420}
+          <div
             style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
+              position: 'absolute',
+              left: '50%',
+              top: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: 16,
+              height: 16,
+              borderRadius: 999,
+              background: 'red',
+              border: '3px solid white',
             }}
           />
+
+          <div
+            style={{
+              position: 'absolute',
+              bottom: 20,
+              left: 20,
+              fontSize: 20,
+              opacity: 0.9,
+            }}
+          >
+            Map View
+          </div>
         </div>
       )}
       </div>
