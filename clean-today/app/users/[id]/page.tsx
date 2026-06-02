@@ -202,6 +202,11 @@ export default function UserProfilePage() {
             </p>
           </div>
         </div>
+        <div className="bg-white border rounded-xl p-6">
+          <h2 className="font-semibold text-gray-700 mb-4">
+            Achievements
+          </h2>
+      </div>
       </div>
     </main>
   )
