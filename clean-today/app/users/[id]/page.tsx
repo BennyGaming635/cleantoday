@@ -224,8 +224,10 @@ export default function UserProfilePage() {
             {achievements.map((achievement) => (
               <div
                 key={achievement.id}
-                className="border rounded-xl p-4 text-center"
-              >
+                className="border rounded-xl p-4 text-center">
+                <p className="font-semibold text-green-700">
+                  {achievement.achievement_key.replace(/_/g, ' ')}
+                </p>
 
                 <p className="text-xs text-gray-500">
                   {achievement.desc}
