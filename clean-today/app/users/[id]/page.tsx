@@ -12,6 +12,13 @@ type Profile = {
   bio: string | null
 }
 
+type Achievement = {
+  id: string
+  achievement_key: string
+  earned_at: string
+  desc: string
+}
+
 const getLevel = (kg: number) => {
   if (kg >= 1000) {
     return {
@@ -67,7 +74,7 @@ export default function UserProfilePage() {
   const [user, setUser] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
   const userLevel = getLevel(totalKgCollected)
-
+  const [achievements, setAchievements] = useState<Achievement[]>([])
   const [organisedCount, setOrganisedCount] = useState(0)
   const [attendedCount, setAttendedCount] = useState(0)
 
@@ -82,6 +89,13 @@ export default function UserProfilePage() {
         .single()
 
       setUser(profile)
+
+      const { data: achievementsData } = await supabase
+        .from('user_achievements')
+        .select('*')
+        .eq('user_id', id)
+
+      setAchievements(achievementsData || [])
 
       const { data: completedEvents } = await supabase
         .from('cleanup_events')
@@ -206,7 +220,20 @@ export default function UserProfilePage() {
           <h2 className="font-semibold text-gray-700 mb-4">
             Achievements
           </h2>
-      </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {achievements.map((achievement) => (
+              <div
+                key={achievement.id}
+                className="border rounded-xl p-4 text-center"
+              >
+
+                <p className="text-xs text-gray-500">
+                  {achievement.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </main>
   )
