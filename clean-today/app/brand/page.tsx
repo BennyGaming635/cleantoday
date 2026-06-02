@@ -11,7 +11,7 @@ export default function BrandPage() {
             Brand Assets
           </h1>
           <p className="text-gray-600 mt-2">
-            Official Clean Today identity assets for councils, partners, and developers.
+            Official Clean Today identity assets for councils, partners, and third parties. The below images are preview images and are PNGs not suitable for production use. Please use the avaliable <a href="https://figma.com/design/eYktFyOUpfeGBXyan61jJt/Clean-Today-Branding-FINAL?node-id=0-1" target="_blank" className="text-green-600 underline">Figma File</a> to access the full set of logos and brand assets in high resolution and vector formats.
           </p>
         </div>
         <section className="space-y-4">
@@ -127,6 +127,8 @@ export default function BrandPage() {
             <p>• Maintain clear spacing around the logo</p>
             <p>• Use inverse logo only on dark backgrounds</p>
             <p>• Do not modify or recreate brand assets</p>
+            <p>• If you are using B/W logos, <b>ONLY</b> use on B/W prints. Do not use on colored products or prints.</p>
+            <p>• This brand kit remains the property of Clean Today and is released to the public in as-is state.</p>
           </div>
         </section>
       </div>
