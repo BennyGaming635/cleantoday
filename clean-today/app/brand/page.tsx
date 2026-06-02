@@ -75,6 +75,20 @@ export default function BrandPage() {
                 className="w-full max-h-40 object-contain p-6 rounded-lg bg-gradient-to-br from-[#169f48] to-[#14532d]"
               />
             </BrandCard>
+
+            <BrandCard title="Clean Today Name (B/W with icon)">
+              <img
+                src="/brand/name-lbw.png"
+                className="w-full max-h-40 object-contain"
+              />
+            </BrandCard>
+
+            <BrandCard title="Clean Today Name (B/W with icon & Inverse)">
+              <img
+                src="/brand/name-lbwi.png"
+                className="w-full max-h-40 object-contain bg-black p-6 rounded-lg"
+              />
+            </BrandCard>
           </div>
         </section>
 
