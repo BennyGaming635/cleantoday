@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase'
+import { supabaseAdmin } from '@/lib/supabaseAdmin'
 
 export async function POST(req: Request) {
   const body = await req.json()
@@ -15,12 +15,12 @@ export async function POST(req: Request) {
   const cutoff = new Date('2026-08-01T00:00:00Z')
 
   if (new Date() < cutoff) {
-    const { error } = await supabase.from('user_achievements').upsert({
-      user_id: userId,
-      achievement_key: 'beta_tester',
-      earned_at: new Date().toISOString(),
-      desc: 'Joined during the beta phase',
-    })
+    const { error } = await supabaseAdmin.from('user_achievements').upsert({
+        user_id: userId,
+        achievement_key: 'Beta_Tester',
+        earned_at: new Date().toISOString(),
+        desc: 'Joined during the beta phase',
+        })
 
     if (error) {
   console.error('Supabase error:', error)
