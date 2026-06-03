@@ -1,8 +1,27 @@
 'use client'
 
 import Link from "next/link"
+import { useEffect } from "react"
+import { supabase } from "@/lib/supabase"
 
 export default function Footer() {
+        useEffect(() => {
+            const run = async () => {
+                const { data } = await supabase.auth.getSession()
+                const user = data.session?.user
+
+                if (!user) return
+
+                await fetch('/api/achievements', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId: user.id }),
+                })
+            }
+
+            run()
+        }, [])
+
     return (
         <footer className="bg-white mt-24">
             <div className="max-w-7xl mx-auto px-6 py-10 bg-white">
