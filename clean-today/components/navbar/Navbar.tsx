@@ -31,18 +31,7 @@ export default function Navbar() {
         username: user.user_metadata?.full_name || user.email,
         avatar_url: user.user_metadata?.avatar_url,
       })
-
-      const cutoff = new Date('2026-08-01T00:00:00Z')
-
-      if (new Date() < cutoff) {
-        await supabase.from('user_achievements').upsert({
-          user_id: user.id,
-          achievement_key: 'beta_tester',
-          earned_at: new Date().toISOString(),
-          desc: 'Joined Clean Today during beta access',
-        })
-      }
-
+      
       const { data: profile } = await supabase
         .from('profiles')
         .select('username, avatar_url')
