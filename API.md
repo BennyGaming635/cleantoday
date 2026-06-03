@@ -66,3 +66,6 @@ Or this error (normally if Supabase is incorrect or you are missing perms)
     "details": "Supabase error message"
 }
 ```
+
+
+# Note this page is still WIP!
