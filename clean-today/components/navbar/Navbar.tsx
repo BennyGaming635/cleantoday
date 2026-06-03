@@ -30,6 +30,21 @@ export default function Navbar() {
         return
       }
 
+      await supabase.from('profiles').upsert({
+        id: user.id,
+        username: user.user_metadata?.full_name || user.email,
+        avatar_url: user.user_metadata?.avatar_url,
+      })
+
+      if (new Date() < new Date('2026-08-01T00:00:00Z')) {
+        await supabase.from('user_achievements').upsert({
+          user_id: user.id,
+          achievement_key: 'beta_tester',
+          earned_at: new Date().toISOString(),
+          desc: 'Joined Clean Today during beta access',
+        })
+      }
+
       const { data } = await supabase
         .from('profiles')
         .select('username, avatar_url')
