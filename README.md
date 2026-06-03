@@ -12,14 +12,27 @@ In Clean Today, you are able to do many things, but the focus is again, on event
 - Explore all events on an map
 - RSVP to events
 - See community stats/milestones
+- Achievements (I've spent too long fixing this..)
 
 For councils, they have access to the above features but can also:
 - See all events easily
 - Create reports for the required areas
 - Declare zones for attention
 
+## Images
+Cool stuff here :P
+
+![Home page of Clean Today](/img/home.png)
+
+![Event page for events](/img/event.png)
+
+![Social cards avaliable for social media posts](/img/socialcard.png)
+
 ## How can I submit changes?
 Well make a branch, make your changes, a PR showing it works and I'll consider merging it (yes very simple I know).
+
+## I want to learn about the APIs
+Well you little API nerd (no offence meant)... Look [here](API.md).
 
 ## For Horizons people (staff or whatever)
 If you're looking for my Lapse recording links, you're in the wrong place. Please check [here instead](LAPSE.md).
