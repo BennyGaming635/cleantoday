@@ -23,11 +23,16 @@ export async function POST(req: Request) {
     })
 
     if (error) {
-      return NextResponse.json(
-        { error: 'Failed to award achievement' },
-        { status: 500 }
-      )
-    }
+  console.error('Supabase error:', error)
+
+  return NextResponse.json(
+    {
+      error: 'Failed to award achievement',
+      details: error.message,
+    },
+    { status: 500 }
+  )
+}
   }
 
   return NextResponse.json({ message: 'ok' })
