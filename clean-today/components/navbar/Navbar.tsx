@@ -20,15 +20,11 @@ export default function Navbar() {
   const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const loadProfile = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
+    const run = async () => {
+      const { data } = await supabase.auth.getSession()
+      const user = data.session?.user
 
-      if (!user) {
-        setProfile(null)
-        return
-      }
+      if (!user) return
 
       await supabase.from('profiles').upsert({
         id: user.id,
@@ -36,7 +32,9 @@ export default function Navbar() {
         avatar_url: user.user_metadata?.avatar_url,
       })
 
-      if (new Date() < new Date('2026-08-01T00:00:00Z')) {
+      const cutoff = new Date('2026-08-01T00:00:00Z')
+
+      if (new Date() < cutoff) {
         await supabase.from('user_achievements').upsert({
           user_id: user.id,
           achievement_key: 'beta_tester',
@@ -45,16 +43,16 @@ export default function Navbar() {
         })
       }
 
-      const { data } = await supabase
+      const { data: profile } = await supabase
         .from('profiles')
         .select('username, avatar_url')
         .eq('id', user.id)
         .single()
 
-      if (data) setProfile(data)
+      if (profile) setProfile(profile)
     }
 
-    loadProfile()
+    run()
   }, [])
 
   useEffect(() => {
