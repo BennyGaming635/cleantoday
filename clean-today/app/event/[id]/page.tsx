@@ -402,7 +402,7 @@ export default function EventPage() {
             {attendees.length === 0 ? (
               <p className="text-gray-500">No attendees yet.</p>
             ) : (
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-3 text-gray-500">
                 {attendees.map((a) => (
                   <div
                     key={a.id}
@@ -427,7 +427,7 @@ export default function EventPage() {
             <h2 className="text-xl font-semibold text-gray-800">Community Posts</h2>
 
             <textarea
-              className="w-full border p-3 rounded-lg"
+              className="w-full border p-3 rounded-lg text-gray-500"
               value={postContent}
               onChange={(e) => setPostContent(e.target.value)}
               placeholder="Share something..."

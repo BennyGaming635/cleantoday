@@ -3,7 +3,7 @@ import { supabaseAdmin } from '@/lib/supabaseAdmin'
 
 export async function GET() {
   return Response.json({
-    status: 'ok',
+    status: '',
     service: 'achievements',
     timestamp: new Date().toISOString(),
   })
