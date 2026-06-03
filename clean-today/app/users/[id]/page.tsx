@@ -225,6 +225,11 @@ export default function UserProfilePage() {
               <div
                 key={achievement.id}
                 className="border rounded-xl p-4 text-center">
+                <img
+                  src={`/achievements/${achievement.achievement_key}.png`}
+                  alt={achievement.achievement_key}
+                  className="w-25 h-25 mx-auto mb-2"
+                />
                 <p className="font-semibold text-green-700">
                   {achievement.achievement_key.replace(/_/g, ' ')}
                 </p>
