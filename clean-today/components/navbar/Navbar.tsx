@@ -13,11 +13,10 @@ type Profile = {
 
 export default function Navbar() {
   const router = useRouter()
-
   const [profile, setProfile] = useState<Profile | null>(null)
-  const [menuOpen, setMenuOpen] = useState(false)
-
-  const menuRef = useRef<HTMLDivElement>(null)
+  const [desktopOpen, setDesktopOpen] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const desktopRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const run = async () => {
@@ -31,7 +30,7 @@ export default function Navbar() {
         username: user.user_metadata?.full_name || user.email,
         avatar_url: user.user_metadata?.avatar_url,
       })
-      
+
       const { data: profile } = await supabase
         .from('profiles')
         .select('username, avatar_url')
@@ -47,10 +46,10 @@ export default function Navbar() {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
-        menuRef.current &&
-        !menuRef.current.contains(event.target as Node)
+        desktopRef.current &&
+        !desktopRef.current.contains(event.target as Node)
       ) {
-        setMenuOpen(false)
+        setDesktopOpen(false)
       }
     }
 
@@ -83,15 +82,15 @@ export default function Navbar() {
             </div>
 
             {profile ? (
-              <div className="relative" ref={menuRef}>
-                <button onClick={() => setMenuOpen(v => !v)}>
+              <div className="relative" ref={desktopRef}>
+                <button onClick={() => setDesktopOpen(v => !v)}>
                   <img
                     src={profile.avatar_url}
                     className="w-10 h-10 rounded-full border object-cover"
                   />
                 </button>
 
-                {menuOpen && (
+                {desktopOpen && (
                   <div className="absolute right-0 mt-2 w-52 bg-white border rounded-xl shadow-lg overflow-hidden">
                     <div className="px-4 py-3 border-b">
                       <p className="font-medium text-gray-800">
@@ -101,16 +100,16 @@ export default function Navbar() {
 
                     <Link
                       href="/dashboard"
-                      className="block px-4 py-3 text-sm hover:bg-gray-50 text-gray-800"
-                      onClick={() => setMenuOpen(false)}
+                      className="block px-4 py-3 text-sm hover:bg-gray-50 text-green-700"
+                      onClick={() => setDesktopOpen(false)}
                     >
                       Dashboard
                     </Link>
 
                     <Link
                       href="/profile"
-                      className="block px-4 py-3 text-sm hover:bg-gray-50 text-gray-800"
-                      onClick={() => setMenuOpen(false)}
+                      className="block px-4 py-3 text-sm hover:bg-gray-50 text-green-700"
+                      onClick={() => setDesktopOpen(false)}
                     >
                       Settings
                     </Link>
@@ -136,42 +135,32 @@ export default function Navbar() {
       </nav>
 
       <button
-        onClick={() => setMenuOpen(true)}
+        onClick={() => setMobileOpen(true)}
         className="md:hidden fixed bottom-6 right-6 z-[99999] bg-green-700 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center"
       >
         ☰
       </button>
 
-      {menuOpen && (
+      {mobileOpen && (
         <div className="md:hidden fixed inset-0 z-[99998] bg-black/40 flex items-end">
-          <div
-            ref={menuRef}
-            className="w-full bg-white rounded-t-2xl p-6 space-y-4 animate-slideUp z-[99998]"
-          >
+          <div className="w-full bg-white rounded-t-2xl p-6 space-y-4 animate-slideUp">
+
             <div className="flex justify-between items-center">
               <p className="font-semibold text-gray-800">Menu</p>
-              <button onClick={() => setMenuOpen(false)}>✕</button>
+              <button onClick={() => setMobileOpen(false)}>✕</button>
             </div>
 
-            <Link href="/" onClick={() => setMenuOpen(false)} className="block text-gray-800">
-              Home
-            </Link>
-            <Link href="/explore" onClick={() => setMenuOpen(false)} className="block text-gray-800">
-              Explore
-            </Link>
-            <Link href="/create" onClick={() => setMenuOpen(false)} className="block text-gray-800">
-              Create
-            </Link>
-            <Link href="/users" onClick={() => setMenuOpen(false)} className="block text-gray-800">
-              Users
-            </Link>
+            <Link href="/" onClick={() => setMobileOpen(false)}>Home</Link>
+            <Link href="/explore" onClick={() => setMobileOpen(false)}>Explore</Link>
+            <Link href="/create" onClick={() => setMobileOpen(false)}>Create</Link>
+            <Link href="/users" onClick={() => setMobileOpen(false)}>Users</Link>
 
             {profile ? (
               <>
-                <Link href="/dashboard" onClick={() => setMenuOpen(false)} className="block text-gray-800">
+                <Link href="/dashboard" onClick={() => setMobileOpen(false)}>
                   Dashboard
                 </Link>
-                <Link href="/profile" onClick={() => setMenuOpen(false)} className="block text-gray-800">
+                <Link href="/profile" onClick={() => setMobileOpen(false)}>
                   Settings
                 </Link>
 
@@ -180,7 +169,7 @@ export default function Navbar() {
                 </button>
               </>
             ) : (
-              <Link href="/login" onClick={() => setMenuOpen(false)} className="block text-gray-800">
+              <Link href="/login" onClick={() => setMobileOpen(false)}>
                 Login
               </Link>
             )}
