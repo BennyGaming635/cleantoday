@@ -1,16 +1,18 @@
-
 'use client'
 
+import { useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
+import { useRouter } from 'next/navigation'
 import Navbar from '@/components/navbar/Navbar'
 
 export default function LoginPage() {
+  const router = useRouter()
 
   const signInWithGitHub = async () => {
     await supabase.auth.signInWithOAuth({
       provider: 'github',
       options: {
-        redirectTo: `${window.location.origin}/explore`,
+        redirectTo: `${window.location.origin}/login`,
       },
     })
   }
@@ -19,10 +21,35 @@ export default function LoginPage() {
     await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/explore`,
+        redirectTo: `${window.location.origin}/login`,
       },
     })
   }
+
+  useEffect(() => {
+    const run = async () => {
+      const { data } = await supabase.auth.getSession()
+      const user = data.session?.user
+
+      if (!user) return
+
+      await supabase.from('profiles').upsert({
+        id: user.id,
+        username: user.user_metadata?.full_name || user.email,
+        avatar_url: user.user_metadata?.avatar_url,
+      })
+
+      await fetch('/api/achievements', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user.id }),
+      })
+
+      router.push('/explore')
+    }
+
+    run()
+  }, [])
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
