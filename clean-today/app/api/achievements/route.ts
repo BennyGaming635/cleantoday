@@ -25,7 +25,7 @@ export async function POST(req: Request) {
 
   const { data: events } = await supabaseAdmin
     .from('cleanup_events')
-    .select('kg_collected')
+    .select('kg_collected, event_time')
     .eq('creator_id', userId)
     .eq('completed', true)
 
@@ -38,6 +38,22 @@ export async function POST(req: Request) {
     events?.reduce((sum, e) => sum + Number(e.kg_collected || 0), 0) || 0
 
   const completedCleanupCount = events?.length || 0
+
+  const hasJulyCleanup = events?.some((e) => {
+    const d = new Date(e.event_time)
+    return d.getUTCMonth() === 6
+  })
+
+  const hasSeptemberCleanup = events?.some((e) => {
+    const d = new Date(e.event_time)
+    return d.getUTCMonth() === 8
+  })
+
+  const hasNovemberCleanup = events?.some((e) => {
+    const d = new Date(e.event_time)
+    return d.getUTCMonth() === 10
+  })
+  
   const awards = []
 
   if ((hostedEvents ?? 0) >= 1) {
