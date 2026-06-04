@@ -29,11 +29,25 @@ export async function POST(req: Request) {
     .eq('creator_id', userId)
     .eq('completed', true)
 
+  const { count: hostedEvents } = await supabaseAdmin
+    .from('cleanup_events')
+    .select('*', { count: 'exact', head: true })
+    .eq('creator_id', userId)
+
   const totalKg =
     events?.reduce((sum, e) => sum + Number(e.kg_collected || 0), 0) || 0
 
   const completedCleanupCount = events?.length || 0
   const awards = []
+
+  if ((hostedEvents ?? 0) >= 1) {
+    awards.push({
+      user_id: userId,
+      achievement_key: 'First_Host',
+      earned_at: now.toISOString(),
+      desc: 'Hosted your first cleanup event',
+    })
+  }
 
   if (completedCleanupCount >= 1) {
     awards.push({
