@@ -36,3 +36,6 @@ Well you little API nerd (no offence meant)... Look [here](API.md).
 
 ## For Horizons people (staff or whatever)
 If you're looking for my Lapse recording links, you're in the wrong place. Please check [here instead](LAPSE.md).
+
+## AI Usage
+While the goal is no AI to be used, GitHub VS Code Chat has been used *only* for bug fixes beyond my knowledge (even with all my attempts to fix it).
