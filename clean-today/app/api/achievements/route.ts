@@ -39,9 +39,9 @@ export async function POST(req: Request) {
 
   const completedCleanupCount = events?.length || 0
 
-  const hasJulyCleanup = events?.some((e) => {
+  const hasJuneCleanup = events?.some((e) => {
     const d = new Date(e.event_time)
-    return d.getUTCMonth() === 6
+    return d.getUTCMonth() === 5
   })
 
   const hasSeptemberCleanup = events?.some((e) => {
@@ -53,7 +53,7 @@ export async function POST(req: Request) {
     const d = new Date(e.event_time)
     return d.getUTCMonth() === 10
   })
-  
+
   const awards = []
 
   if ((hostedEvents ?? 0) >= 1) {
@@ -62,6 +62,33 @@ export async function POST(req: Request) {
       achievement_key: 'First_Host',
       earned_at: now.toISOString(),
       desc: 'Hosted your first cleanup event',
+    })
+  }
+
+  if (hasJuneCleanup) {
+    awards.push({
+      user_id: userId,
+      achievement_key: 'Pride_Month',
+      earned_at: now.toISOString(),
+      desc: 'Completed a cleanup event in June (Pride Month)',
+    })
+  }
+
+  if (hasSeptemberCleanup) {
+    awards.push({
+      user_id: userId,
+      achievement_key: 'Honey_Month',
+      earned_at: now.toISOString(),
+      desc: 'Completed a cleanup event in the month of Honey!',
+    })
+  }
+
+  if (hasNovemberCleanup) {
+    awards.push({
+      user_id: userId,
+      achievement_key: 'Movember',
+      earned_at: now.toISOString(),
+      desc: 'Completed a cleanup event during the month of the Mowstache',
     })
   }
 
