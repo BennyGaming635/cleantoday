@@ -52,6 +52,15 @@ export async function POST(req: Request) {
     })
   }
 
+  if (totalKg >= 50) {
+    awards.push({
+      user_id: userId,
+      achievement_key: '50kg_Cleaner',
+      earned_at: now.toISOString(),
+      desc: 'Collected 50kg of waste',
+    })
+  }
+
   if (awards.length === 0) {
     return NextResponse.json({ message: 'No achievements earned' })
   }
