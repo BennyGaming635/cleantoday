@@ -67,5 +67,38 @@ Or this error (normally if Supabase is incorrect or you are missing perms)
 }
 ```
 
+---
+
+### Health API
+
+'GET /api/health'
+
+This API allows services or Better Stack (our API upkeep tool) to automatically report the current status of our systems.
+
+**Body/Payload**
+
+There is no payload you can send to this API.
+
+**Normal Response**
+```json
+{
+  "status": "ok",
+  "database": "connected",
+  "timestamp": "2026-06-04T00:00:00Z"
+}
+```
+
+**Errors**
+If there is something wrong, the API will instead send a response such as
+```json
+{
+    "status": "error",
+    "message": "error.message",
+},
+```
+
+error.message would be replaced with the actual error such as a Supabase error or something else.
+If there is an issue without an error message, there will be no `"message"` sent.
+
 
 # Note this page is still WIP!
