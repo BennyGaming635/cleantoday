@@ -32,7 +32,17 @@ export async function POST(req: Request) {
   const totalKg =
     events?.reduce((sum, e) => sum + Number(e.kg_collected || 0), 0) || 0
 
+  const completedCleanupCount = events?.length || 0
   const awards = []
+
+  if (completedCleanupCount >= 1) {
+    awards.push({
+      user_id: userId,
+      achievement_key: 'First_Cleanup',
+      earned_at: now.toISOString(),
+      desc: 'Completed your first cleanup event',
+    })
+  }
 
   if (now < cutoff) {
     awards.push({
