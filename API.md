@@ -100,5 +100,4 @@ If there is something wrong, the API will instead send a response such as
 error.message would be replaced with the actual error such as a Supabase error or something else.
 If there is an issue without an error message, there will be no `"message"` sent.
 
-
 # Note this page is still WIP!
