@@ -47,9 +47,24 @@ export async function POST(req: Request) {
     return d.getUTCMonth() === 5
   })
 
+  const hasJulyCleanup = events?.some((e) => {
+    const d = new Date(e.event_time)
+    return d.getUTCMonth() === 6
+  })
+
+  const hasAugustCleanup = events?.some((e) => {
+    const d = new Date(e.event_time)
+    return d.getUTCMonth() === 7
+  })
+
   const hasSeptemberCleanup = events?.some((e) => {
     const d = new Date(e.event_time)
     return d.getUTCMonth() === 8
+  })
+
+  const hasOctoberCleanup = events?.some((e) => {
+    const d = new Date(e.event_time)
+    return d.getUTCMonth() === 9
   })
 
   const hasNovemberCleanup = events?.some((e) => {
@@ -95,12 +110,39 @@ export async function POST(req: Request) {
     })
   }
 
+  if (hasJulyCleanup) {
+    awards.push({
+      user_id: userId,
+      achievement_key: 'Cleaner_July',
+      earned_at: now.toISOString(),
+      desc: 'Completed a cleanup event in July',
+    })
+  }
+
+  if (hasAugustCleanup) {
+    awards.push({
+      user_id: userId,
+      achievement_key: 'Super_August',
+      earned_at: now.toISOString(),
+      desc: 'Completed a cleanup event in August',
+    })
+  }
+
   if (hasSeptemberCleanup) {
     awards.push({
       user_id: userId,
       achievement_key: 'Honey_Month',
       earned_at: now.toISOString(),
       desc: 'Completed a cleanup event in the month of Honey!',
+    })
+  }
+
+  if (hasOctoberCleanup) {
+    awards.push({
+      user_id: userId,
+      achievement_key: 'Spooky_October',
+      earned_at: now.toISOString(),
+      desc: 'Completed a cleanup event in the spookiest month',
     })
   }
 
