@@ -65,6 +65,15 @@ export async function POST(req: Request) {
     })
   }
 
+  if ((hostedEvents ?? 0) >= 5) {
+    awards.push({
+      user_id: userId,
+      achievement_key: '5th_Host',
+      earned_at: now.toISOString(),
+      desc: 'Hosted your 5th cleanup event',
+    })
+  }
+
   if (hasJuneCleanup) {
     awards.push({
       user_id: userId,
@@ -101,6 +110,15 @@ export async function POST(req: Request) {
     })
   }
 
+  if (completedCleanupCount >= 5) {
+    awards.push({
+      user_id: userId,
+      achievement_key: '5th_Clean',
+      earned_at: now.toISOString(),
+      desc: 'Completed your 5th cleanup event',
+    })
+  }
+
   if (now < cutoff) {
     awards.push({
       user_id: userId,
@@ -125,6 +143,15 @@ export async function POST(req: Request) {
       achievement_key: '50kg_Cleaner',
       earned_at: now.toISOString(),
       desc: 'Collected 50kg of waste',
+    })
+  }
+
+  if (totalKg >= 100) {
+    awards.push({
+      user_id: userId,
+      achievement_key: '100kg_Beachball',
+      earned_at: now.toISOString(),
+      desc: 'Collected 100kg of waste',
     })
   }
 
