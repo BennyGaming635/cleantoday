@@ -22,6 +22,9 @@ export async function POST(req: Request) {
 
   const now = new Date()
   const cutoff = new Date('2026-08-01T00:00:00Z')
+  const adminIds = [
+    'ca3b5ed6-693b-4604-83ad-204ada44953e',
+  ]
 
   const { data: events } = await supabaseAdmin
     .from('cleanup_events')
@@ -55,6 +58,15 @@ export async function POST(req: Request) {
   })
 
   const awards = []
+
+  if (adminIds.includes(userId)) {
+    awards.push({
+      user_id: userId,
+      achievement_key: 'Site_Admin',
+      earned_at: now.toISOString(),
+      desc: 'Admin of Clean Today',
+    })
+  }
 
   if ((hostedEvents ?? 0) >= 1) {
     awards.push({
