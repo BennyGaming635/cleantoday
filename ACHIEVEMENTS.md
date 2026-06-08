@@ -14,4 +14,5 @@ Clean Today has user achievements which are earnt via doing serveral different t
 | ![First Host Badge](/clean-today/public/achievements/First_Host.png) | First Host | Host 1 event |
 | ![First Clean Badge](/clean-today/public/achievements/First_Cleanup.png) | First Cleanup | Attend 1 event |
 | ![Cleaner July Badge](/clean-today/public/achievements/Cleaner_July.png) | Cleaner July | Complete 1 event in July |
-| ![Beta Tester Badge](/clean-today/public/achievements/Beta_Tester.png) | Beta Tester |
+| ![Beta Tester Badge](/clean-today/public/achievements/Beta_Tester.png) | Beta Tester | Sign up during the beta period |
+| ![100kg Beachball Badge](/clean-today/public/achievements/100kg_Beachball.png) | 100kg Beachball | Collect a total of 100kg |
