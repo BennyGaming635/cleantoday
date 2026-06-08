@@ -11,3 +11,5 @@ Clean Today has user achievements which are earnt via doing serveral different t
 | ![Pride Month Badge](/clean-today/public/achievements/Pride_Month.png) | Pride Month | Complete 1 event in June |
 | ![Movember Badge](/clean-today/public/achievements/Movember.png) | Movember | Complete 1 event in November |
 | ![Honey Month Badge](/clean-today/public/achievements/Honey_Month.png) | Honey Month | Complete 1 event in September |
+| ![First Host Badge](/clean-today/public/achievements/First_Host.png) | First Host | Host 1 event |
+| ![First Clean Badge](/clean-today/public/achievements/First_Cleanup.png) First Cleanup | Attend 1 event |
