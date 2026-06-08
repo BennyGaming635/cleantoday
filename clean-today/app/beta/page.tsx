@@ -45,7 +45,7 @@ export default function HomePage() {
     }, [])
 
     return (
-        <main className="min-h-screen bg-gradient-to-b from-green-50 to-white">
+        <main className="min-h-screen bg-white">
             <Navbar />
 
             <section className="max-w-7xl mx-auto px-6 pt-32 pb-24 space-y-14">
@@ -55,7 +55,7 @@ export default function HomePage() {
                         alt="Clean Today Logo"
                         className="w-24 h-24 mb-2"
                     />
-                    
+
                     <h1 className="text-6xl font-bold text-gray-900 leading-tight">
                         Organise community cleanups.
                     </h1>
