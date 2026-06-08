@@ -16,3 +16,5 @@ Clean Today has user achievements which are earnt via doing serveral different t
 | ![Cleaner July Badge](/clean-today/public/achievements/Cleaner_July.png) | Cleaner July | Complete 1 event in July |
 | ![Beta Tester Badge](/clean-today/public/achievements/Beta_Tester.png) | Beta Tester | Sign up during the beta period |
 | ![100kg Beachball Badge](/clean-today/public/achievements/100kg_Beachball.png) | 100kg Beachball | Collect a total of 100kg |
+| ![50kg Cleaner Badge](/clean-today/public/achievements/50kg_Cleaner.png) | 50kg Cleaner | Collect a total of 50kg |
+| ![10kg Club Badge](/clean-today/public/achievements/10kg_Club.png) | 10kg Club | Collect a total of 10kg |
