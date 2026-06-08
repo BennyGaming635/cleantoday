@@ -34,6 +34,9 @@ Well make a branch, make your changes, a PR showing it works and I'll consider m
 ## I want to learn about the APIs
 Well you little API nerd (no offence meant)... Look [here](API.md).
 
+## What achievements can I earn?
+Uhh there's a lot of achievemnts, clean more [here](ACHIEVEMENTS.md)
+
 ## For Horizons people (staff or whatever)
 If you're looking for my Lapse recording links, you're in the wrong place. Please check [here instead](LAPSE.md).
 
