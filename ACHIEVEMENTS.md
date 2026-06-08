@@ -10,3 +10,4 @@ Clean Today has user achievements which are earnt via doing serveral different t
 | ![Site Admin Badge](/clean-today/public/achievements/Site_Admin.png) | Site Admin | Administrator of Clean Today |
 | ![Pride Month Badge](/clean-today/public/achievements/Pride_Month.png) | Pride Month | Complete 1 event in June |
 | ![Movember Badge](/clean-today/public/achievements/Movember.png) | Movember | Complete 1 event in November |
+| ![Honey Month Badge](/clean-today/public/achievements/Honey_Month.png) | Honey Month | Complete 1 event in September |
