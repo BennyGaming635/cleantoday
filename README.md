@@ -35,6 +35,9 @@ Cool stuff here :P
 ## How can I submit changes?
 Well make a branch, make your changes, a PR showing it works and I'll consider merging it (yes very simple I know).
 
+## Supporting us
+At the moment, I haven't fully set this up, but you can currently see stuff on the [support page (leaving GitHub)](https://cleantoday.vercel.app/support). also admire my pretty home page ty.
+
 ## I want to learn about the APIs
 Well you little API nerd (no offence meant)... Look [here](API.md).
 
