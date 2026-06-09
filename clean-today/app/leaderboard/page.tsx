@@ -45,6 +45,7 @@ export default function Leaderboard() {
           ...profile,
           totalKg: totals.get(profile.id) || 0,
         }))
+        .filter(user => user.totalKg > 0)
         .sort((a, b) => b.totalKg - a.totalKg) || []
 
       setUsers(leaderboard)
