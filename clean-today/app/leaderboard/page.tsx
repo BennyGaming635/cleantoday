@@ -104,10 +104,7 @@ export default function Leaderboard() {
                   </div>
 
                   <img
-                    src={
-                      user.avatar_url ||
-                      'https://placehold.co/100x100'
-                    }
+                    src={user.avatar_url}
                     alt={user.username}
                     className="w-12 h-12 rounded-full border object-cover"
                   />
