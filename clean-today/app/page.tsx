@@ -74,6 +74,11 @@ export default function HomePage() {
                                 Create Event
                             </Button>
                         </Link>
+                        <Link href="/support">
+                            <Button size="lg" className="bg-white border border-green-200 hover:bg-green-50 text-green-800 px-7 py-4 rounded-2xl font-semibold">
+                                Support Us
+                            </Button>
+                        </Link>
                     </div>
                 </div>
 
