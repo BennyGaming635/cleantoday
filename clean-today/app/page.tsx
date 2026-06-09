@@ -12,7 +12,7 @@ export default function HomePage() {
         totalKg: 0,
         totalAttendees: 0,
     })
-    
+
     useEffect(() => {
         const loadStats = async () => {
             const { data: events } = await supabase
@@ -24,6 +24,7 @@ export default function HomePage() {
                 .select('id')
 
             const totalEvents = events?.length || 0
+
             const totalKg =
                 events?.reduce(
                     (sum, e) => sum + Number(e.kg_collected || 0),
@@ -46,42 +47,72 @@ export default function HomePage() {
         <main className="min-h-screen bg-white">
             <Navbar />
 
-            <section className="max-w-7xl mx-auto px-6 pt-32 pb-24 space-y-14">
-                <div className="max-w-4xl space-y-8">
-                    <img
-                        src="/brand/logo-c.png"
-                        alt="Clean Today Logo"
-                        className="w-24 h-24 mb-2"
-                    />
+            <section className="relative min-h-screen flex items-center overflow-hidden">
+                <video
+                    className="absolute inset-0 w-full h-full object-cover"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                >
+                    <source src="/dronestock.mp4" type="video/mp4" />
+                </video>
 
-                    <h1 className="text-6xl font-bold text-gray-900 leading-tight">
-                        Organise community cleanups.
-                    </h1>
+                <div className="absolute inset-0 bg-black/50" />
+                <div className="relative z-10 max-w-7xl mx-auto px-6 py-32 space-y-14 text-white">
 
-                    <p className="text-xl text-gray-600 max-w-3xl leading-relaxed">
-                        Find or create community cleanups near you and make real environmental impact with people around you.
-                    </p>
+                    <div className="max-w-4xl space-y-8">
 
-                    <div className="flex flex-wrap gap-4">
-                        <Link href="/explore">
-                            <Button size="lg" className="bg-green-700 hover:bg-green-800 text-white px-7 py-4 rounded-2xl font-semibold">
-                                Explore Events
-                            </Button>
-                        </Link>
+                        <img
+                            src="/brand/logo-c.png"
+                            alt="Clean Today Logo"
+                            className="w-24 h-24 mb-2"
+                        />
 
-                        <Link href="/create">
-                            <Button size="lg" className="bg-white border border-green-200 hover:bg-green-50 text-green-800 px-7 py-4 rounded-2xl font-semibold">
-                                Create Event
-                            </Button>
-                        </Link>
-                        <Link href="/support">
-                            <Button size="lg" className="bg-white border border-green-200 hover:bg-green-50 text-green-800 px-7 py-4 rounded-2xl font-semibold">
-                                Support Us
-                            </Button>
-                        </Link>
+                        <h1 className="text-6xl font-bold leading-tight">
+                            Organise community cleanups.
+                        </h1>
+
+                        <p className="text-xl text-white/80 max-w-3xl leading-relaxed">
+                            Find or create community cleanups near you and make real environmental impact with people around you.
+                        </p>
+
+                        <div className="flex flex-wrap gap-4">
+                            <Link href="/explore">
+                                <Button
+                                    size="lg"
+                                    className="bg-green-700 hover:bg-green-800 text-white px-7 py-4 rounded-2xl font-semibold"
+                                >
+                                    Explore Events
+                                </Button>
+                            </Link>
+
+                            <Link href="/create">
+                                <Button
+                                    size="lg"
+                                    className="bg-white text-green-800 px-7 py-4 rounded-2xl font-semibold"
+                                >
+                                    Create Event
+                                </Button>
+                            </Link>
+
+                            <Link href="/support">
+                                <Button
+                                    size="lg"
+                                    className="bg-white text-green-800 px-7 py-4 rounded-2xl font-semibold"
+                                >
+                                    Support Us
+                                </Button>
+                            </Link>
+                        </div>
                     </div>
                 </div>
 
+                <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-white to-transparent" />
+            </section>
+
+            <section className="max-w-7xl mx-auto px-6 pt-24 pb-24 space-y-14">
                 <div className="grid md:grid-cols-3 gap-6">
                     <div className="bg-white border rounded-3xl p-8 shadow-sm">
                         <h3 className="text-2xl font-bold text-gray-900 mb-3">
