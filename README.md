@@ -23,9 +23,11 @@ For councils, they have access to the above features but can also:
 ## Images
 Cool stuff here :P
 
-![Home page of Clean Today](/img/home.png)
+![NEW Home page of Clean Today](/img/home.png)
 
 ![Event page for events](/img/event.png)
+
+![Profile page for users](/img/profile.png)
 
 ![Social cards avaliable for social media posts](/img/socialcard.png)
 
@@ -38,6 +40,8 @@ Well you little API nerd (no offence meant)... Look [here](API.md).
 ## What achievements can I earn?
 Uhh there's a lot of achievemnts, learn more [here](ACHIEVEMENTS.md).
 
+## Credits
+I think I should be crediting people here, but thank you to Figma (for the education plan xd) and Pixels for stock footage.
 ## For Horizons people (staff or whatever)
 If you're looking for my Lapse recording links, you're in the wrong place. Please check [here instead](LAPSE.md).
 
