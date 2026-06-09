@@ -41,7 +41,7 @@ Well you little API nerd (no offence meant)... Look [here](API.md).
 Uhh there's a lot of achievemnts, learn more [here](ACHIEVEMENTS.md).
 
 ## Credits
-I think I should be crediting people here, but thank you to Figma (for the education plan xd) and Pixels for stock footage.
+I think I should be crediting people here, but thank you to Figma (for the education plan xd) and Pexels for stock footage.
 ## For Horizons people (staff or whatever)
 If you're looking for my Lapse recording links, you're in the wrong place. Please check [here instead](LAPSE.md).
 
