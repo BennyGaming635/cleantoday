@@ -5,6 +5,8 @@ import { useEffect } from "react"
 import { supabase } from "@/lib/supabase"
 
 export default function Footer() {
+    const dinoHref = "https://example.com"
+
         useEffect(() => {
             const run = async () => {
                 const { data } = await supabase.auth.getSession()
@@ -84,13 +86,18 @@ export default function Footer() {
                         <br></br>
                         A <b>Cleaner Today</b> for a better Tomorrow.
                     </p>
-                <div className="flex flex-wrap gap-4 text-sm text-gray-500">
-                    <Link href="/">Home</Link>
-                    <Link href="/explore">Explore</Link>
-                    <Link href="/status">Status</Link>
-                    <Link href="/users">Users</Link>
+                    <div className="flex flex-col items-start md:items-end gap-4">
+                        <Link href="https://bgbs.au/chip" className="inline-flex items-center bg-white p-2" target="_blank" rel="noreferrer">
+                            <img src="/dino.png" alt="Dino" className="h-6 w-6 object-contain" />
+                        </Link>
+                        <div className="flex flex-wrap gap-4 text-sm text-gray-500">
+                            <Link href="/">Home</Link>
+                            <Link href="/explore">Explore</Link>
+                            <Link href="/status">Status</Link>
+                            <Link href="/users">Users</Link>
+                        </div>
+                    </div>
                 </div>
-            </div>
             </div>
         </footer>
     )
