@@ -13,7 +13,7 @@ export default function TermsPage() {
                             Terms and Conditions
                         </h1>
                         <p className="text-gray-500 mt-3">
-                            Last updated: May 21, 2026
+                            Last updated: June 9, 2026
                         </p>
                     </div>
                     <section className="space-y-3">
