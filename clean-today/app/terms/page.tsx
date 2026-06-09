@@ -134,7 +134,7 @@ export default function TermsPage() {
                     </section>
                     <section className="space-y-3">
                         <h2 className="text-2xl font-semibold text-gray-800">
-                            Chamges to These Terms
+                            Changes to These Terms
                         </h2>
                         <p className="text-gray-700 leading-7">
                             These Terms & Conditions may be updated over time.
