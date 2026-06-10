@@ -46,6 +46,7 @@ Uhh there's a lot of achievemnts, learn more [here](ACHIEVEMENTS.md).
 
 ## Credits
 I think I should be crediting people here, but thank you to Figma (for the education plan xd) and Pexels for stock footage.
+
 ## For Horizons people (staff or whatever)
 If you're looking for my Lapse recording links, you're in the wrong place. Please check [here instead](LAPSE.md).
 
