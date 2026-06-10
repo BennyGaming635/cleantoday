@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
+import { supabaseAdmin } from '@/lib/supabaseAdmin'
 import AdminGuard from '@/components/admin/AdminGuard'
 import { logoutAdmin } from '@/lib/adminAuth'
 
@@ -21,7 +21,7 @@ export default function AdminDashboard() {
   const load = async () => {
     setLoading(true)
 
-    const { data } = await supabase
+    const { data } = await supabaseAdmin
       .from('cleanup_events')
       .select('*')
       .order('created_at', { ascending: false })
@@ -37,12 +37,12 @@ export default function AdminDashboard() {
   }, [])
 
   const deleteEvent = async (id: string) => {
-    await supabase.from('cleanup_events').delete().eq('id', id)
+    await supabaseAdmin.from('cleanup_events').delete().eq('id', id)
     load()
   }
 
   const markComplete = async (id: string) => {
-    await supabase
+    await supabaseAdmin
       .from('cleanup_events')
       .update({ completed: true })
       .eq('id', id)
@@ -51,7 +51,7 @@ export default function AdminDashboard() {
   }
 
   const markActive = async (id: string) => {
-    await supabase
+    await supabaseAdmin
       .from('cleanup_events')
       .update({ completed: false })
       .eq('id', id)
