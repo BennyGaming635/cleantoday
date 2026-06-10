@@ -63,6 +63,16 @@ export default function Me() {
                     Welcome back, {username}!
                 </h1>
             </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                <div className="bg-white border rounded-3xl p-8 shadow-sm">
+                    <p className="text-4xl font-bold text-green-700">
+                        {stats.badges}
+                    </p>
+                    <p className="text-gray-600 mt-2">
+                        Badges Earned
+                    </p>
+                </div>
+            </div>
         </main>
     )
 }
