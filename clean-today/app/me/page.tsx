@@ -123,116 +123,114 @@ export default function Me() {
                 </div>
             </section>
             <section className="max-w-7xl mx-auto px-6 pb-24 grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div>
-                    <div className="bg-white border rounded-3xl p-8 shadow-sm">
-                        <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                            Upcoming Events
-                        </h2>
+                <div className="bg-white border rounded-3xl p-8 shadow-sm">
+                    <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                        Upcoming Events
+                    </h2>
 
-                        <div className="space-y-4">
-                            {upcomingEvents.length === 0 && (
-                                <p className="text-gray-500">
-                                    No upcoming events.
-                                </p>
-                            )}
+                    <div className="space-y-4">
+                        {upcomingEvents.length === 0 && (
+                            <p className="text-gray-500">
+                                No upcoming events.
+                            </p>
+                        )}
 
-                            {upcomingEvents.map((event) => {
-                                const date = new Date(event.event_time)
+                        {upcomingEvents.map((event) => {
+                            const date = new Date(event.event_time)
 
-                                const month = date.toLocaleDateString('en-AU', {
-                                    month: 'short',
-                                })
+                            const month = date.toLocaleDateString('en-AU', {
+                                month: 'short',
+                            })
 
-                                const day = date.getDate()
+                            const day = date.getDate()
 
-                                const time = date.toLocaleTimeString('en-AU', {
-                                    hour: 'numeric',
-                                    minute: '2-digit',
-                                })
-
-                                return (
-                                    <Link
-                                        key={event.id}
-                                        href={`/event/${event.id}`}
-                                        className="flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-50 transition border"
-                                    >
-                                        <div className="w-40 h-24 rounded-2xl border overflow-hidden flex flex-col shrink-0">
-                                            <div className="bg-green-700 text-white text-xs font-bold text-center py-2 uppercase">
-                                                {month}
-                                            </div>
-
-                                            <div className="flex-1 flex items-center justify-center text-4xl font-bold text-gray-900">
-                                                {day}
-                                            </div>
-                                        </div>
-
-                                        <div>
-                                            <p className="font-semibold text-gray-900">
-                                                {event.title}
-                                            </p>
-
-                                            <p className="text-sm text-gray-500">
-                                                {time}
-                                            </p>
-                                        </div>
-                                    </Link>
-                                )
-                            })}
-                        </div>
-                    </div>
-
-                    <div className="bg-white border rounded-3xl p-8 shadow-sm">
-                        <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                            Next Goal
-                        </h2>
-
-                        {(() => {
-                            let nextGoal = 10
-                            let badgeName = '10kg Club'
-
-                            if (stats.kgCollected >= 10) {
-                                nextGoal = 50
-                                badgeName = '50kg Cleaner'
-                            }
-
-                            if (stats.kgCollected >= 50) {
-                                nextGoal = 100
-                                badgeName = '100kg Champion'
-                            }
-
-                            const remaining = Math.max(0, nextGoal - stats.kgCollected)
-
-                            const percent = Math.min(
-                                (stats.kgCollected / nextGoal) * 100,
-                                100
-                            )
+                            const time = date.toLocaleTimeString('en-AU', {
+                                hour: 'numeric',
+                                minute: '2-digit',
+                            })
 
                             return (
-                                <div className="space-y-6">
-                                    <p className="text-5xl font-bold text-green-700">
-                                        {stats.kgCollected}kg
-                                    </p>
+                                <Link
+                                    key={event.id}
+                                    href={`/event/${event.id}`}
+                                    className="flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-50 transition border"
+                                >
+                                    <div className="w-40 h-24 rounded-2xl border overflow-hidden flex flex-col shrink-0">
+                                        <div className="bg-green-700 text-white text-xs font-bold text-center py-2 uppercase">
+                                            {month}
+                                        </div>
 
-                                    <p className="text-gray-600">
-                                        {remaining}kg until
-                                    </p>
-
-                                    <p className="text-2xl font-semibold text-gray-900">
-                                        {badgeName}
-                                    </p>
-
-                                    <div className="w-full h-4 bg-gray-100 rounded-full overflow-hidden mt-6">
-                                        <div
-                                            className="h-full bg-green-700 rounded-full"
-                                            style={{
-                                                width: `${percent}%`,
-                                            }}
-                                        />
+                                        <div className="flex-1 flex items-center justify-center text-4xl font-bold text-gray-900">
+                                            {day}
+                                        </div>
                                     </div>
-                                </div>
+
+                                    <div>
+                                        <p className="font-semibold text-gray-900">
+                                            {event.title}
+                                        </p>
+
+                                        <p className="text-sm text-gray-500">
+                                            {time}
+                                        </p>
+                                    </div>
+                                </Link>
                             )
-                        })()}
+                        })}
                     </div>
+                </div>
+
+                <div className="bg-white border rounded-3xl p-8 shadow-sm">
+                    <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                        Next Goal
+                    </h2>
+
+                    {(() => {
+                        let nextGoal = 10
+                        let badgeName = '10kg Club'
+
+                        if (stats.kgCollected >= 10) {
+                            nextGoal = 50
+                            badgeName = '50kg Cleaner'
+                        }
+
+                        if (stats.kgCollected >= 50) {
+                            nextGoal = 100
+                            badgeName = '100kg Champion'
+                        }
+
+                        const remaining = Math.max(0, nextGoal - stats.kgCollected)
+
+                        const percent = Math.min(
+                            (stats.kgCollected / nextGoal) * 100,
+                            100
+                        )
+
+                        return (
+                            <div className="space-y-6">
+                                <p className="text-5xl font-bold text-green-700">
+                                    {stats.kgCollected}kg
+                                </p>
+
+                                <p className="text-gray-600">
+                                    {remaining}kg until
+                                </p>
+
+                                <p className="text-2xl font-semibold text-gray-900">
+                                    {badgeName}
+                                </p>
+
+                                <div className="w-full h-4 bg-gray-100 rounded-full overflow-hidden mt-6">
+                                    <div
+                                        className="h-full bg-green-700 rounded-full"
+                                        style={{
+                                            width: `${percent}%`,
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        )
+                    })()}
                 </div>
             </section>
             </main>
