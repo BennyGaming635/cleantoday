@@ -122,8 +122,8 @@ export default function Me() {
 
                 </div>
             </section>
-            <section className="max-w-7xl mx-auto px-6 pb-24">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <section className="max-w-7xl mx-auto px-6 pb-24 grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div>
                     <div className="bg-white border rounded-3xl p-8 shadow-sm">
                         <h2 className="text-3xl font-bold text-gray-900 mb-6">
                             Upcoming Events
