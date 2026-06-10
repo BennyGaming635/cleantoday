@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
+import Link from 'next/link'
 import Navbar from '@/components/navbar/Navbar'
 
 type UpcomingEvent = {
@@ -121,6 +122,71 @@ export default function Me() {
 
                 </div>
             </section>
+            <section className="max-w-7xl mx-auto px-6 pb-24">
+                <div className="bg-white border rounded-3xl p-8 shadow-sm">
+
+                    <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                    Upcoming Events
+                    </h2>
+
+                    <div className="space-y-4">
+
+                    {upcomingEvents.map((event) => {
+                        const date = new Date(event.event_time)
+
+                        const month = date.toLocaleDateString('en-AU', {
+                        month: 'short',
+                        })
+
+                        const day = date.getDate()
+
+                        const time = date.toLocaleTimeString('en-AU', {
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        })
+
+                        return (
+                        <Link
+                            key={event.id}
+                            href={`/events/${event.id}`}
+                            className="flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-50 transition"
+                        >
+                            {/* Calendar */}
+                            <div className="w-16 h-16 rounded-xl border overflow-hidden flex flex-col shrink-0">
+
+                            <div className="bg-green-700 text-white text-xs font-bold text-center py-1 uppercase">
+                                {month}
+                            </div>
+
+                            <div className="flex-1 flex items-center justify-center text-xl font-bold text-gray-900">
+                                {day}
+                            </div>
+
+                            </div>
+
+                            {/* Event details */}
+                            <div>
+                            <p className="font-semibold text-gray-900">
+                                {event.title}
+                            </p>
+
+                            <p className="text-sm text-gray-500">
+                                {time}
+                            </p>
+                            </div>
+                        </Link>
+                        )
+                    })}
+
+                    {upcomingEvents.length === 0 && (
+                        <p className="text-gray-500">
+                        No upcoming events.
+                        </p>
+                    )}
+
+                    </div>
+                </div>
+                </section>
             </main>
     )
 }
