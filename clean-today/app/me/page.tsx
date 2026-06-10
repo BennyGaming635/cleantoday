@@ -6,6 +6,11 @@ import Navbar from '@/components/navbar/Navbar'
 
 export default function Me() {
     const [username, setUsername] = useState('')
+    const [stats, setStats] = useState({
+        badges: 0,
+        kgCollected: 0,
+        eventsHosted: 0,
+    })
     
     useEffect(() => {
         const load = async () => {
