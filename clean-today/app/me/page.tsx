@@ -44,6 +44,15 @@ export default function Me() {
                 .eq('creator_id', user.id)
                 .eq('completed', true)
 
+            const { data: upcoming } = await supabase
+                .from('cleanup_events')
+                .select('id, title, event_time')
+                .gte('event_time', new Date().toISOString())
+                .order('event_time', {ascending: true})
+                .limit(5)
+
+            setUpcomingEvents(upcoming || [])
+
             const badges = achievements?.length || 0
             const eventsHosted = events?.length || 0
             const kgCollected =
