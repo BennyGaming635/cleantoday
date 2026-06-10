@@ -26,7 +26,31 @@ export default function Me() {
                 .eq('id', user.id)
                 .single()
 
+            const { data: achievements } = await supabase
+                .from('user_achievements')
+                .select('achievement_key')
+                .eq('user_id', user.id)
+            
+            const { data: events } = await supabase
+                .from('cleanup_events')
+                .select('kg_collected')
+                .eq('creator_id', user.id)
+                .eq('completed', true)
+
+            const badges = achievements?.length || 0
+            const eventsHosted = events?.length || 0
+            const kgCollected =
+                events?.reduce(
+                    (sum, event) => sum + Number(event.kg_collected || 0),
+                    0
+                ) ?? 0
+
             setUsername(profile?.username || 'User')
+            setStats({
+                badges,
+                kgCollected,
+                eventsHosted,
+            })
         }
         load()
     }, [])
