@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
 import AdminGuard from '@/components/admin/AdminGuard'
 import { logoutAdmin } from '@/lib/adminAuth'
 
@@ -21,10 +20,8 @@ export default function AdminDashboard() {
   const load = async () => {
     setLoading(true)
 
-    const { data } = await supabase
-      .from('cleanup_events')
-      .select('*')
-      .order('created_at', { ascending: false })
+    const res = await fetch('/api/admin/events')
+    const data = await res.json()
 
     setEvents(data || [])
     setLoading(false)
@@ -37,25 +34,35 @@ export default function AdminDashboard() {
   }, [])
 
   const deleteEvent = async (id: string) => {
-    await supabase.from('cleanup_events').delete().eq('id', id)
+    await fetch('/api/admin/events', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ action: 'delete', id })
+    })
     load()
   }
 
   const markComplete = async (id: string) => {
-    await supabase
-      .from('cleanup_events')
-      .update({ completed: true })
-      .eq('id', id)
-
+    await fetch('/api/admin/events', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ action: 'complete', id })
+    })
     load()
   }
 
   const markActive = async (id: string) => {
-    await supabase
-      .from('cleanup_events')
-      .update({ completed: false })
-      .eq('id', id)
-
+    await fetch('/api/admin/events', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ action: 'reopen', id })
+    })
     load()
   }
 
