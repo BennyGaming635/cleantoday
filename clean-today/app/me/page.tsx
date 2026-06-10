@@ -56,39 +56,55 @@ export default function Me() {
     }, [])
 
     return (
-        <main className="min-h-screen bg-green-50">
+        <main className="min-h-screen bg-white">
             <Navbar />
-            <div className="max-w-7xl mx-auto p-6">
-                <h1 className="text-5xl font-bold text-green-700">
-                    Welcome back, {username}!
+
+            <section className="max-w-7xl mx-auto px-6 pt-24 pb-12">
+
+                <div className="max-w-4xl">
+                <h1 className="text-6xl font-bold text-gray-900 leading-tight">
+                    Welcome back {username}
                 </h1>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-                <div className="bg-white border rounded-3xl p-8 shadow-sm">
+
+                <p className="text-xl text-gray-600 mt-4">
+                    Here&apos;s an overview of your impact so far.
+                </p>
+                </div>
+
+            </section>
+
+            <section className="max-w-7xl mx-auto px-6 pb-24">
+                <div className="grid md:grid-cols-3 gap-6">
+
+                <div className="bg-white border rounded-3xl p-10 shadow-sm">
                     <p className="text-4xl font-bold text-green-700">
-                        {stats.badges}
+                    {stats.badges}
                     </p>
                     <p className="text-gray-600 mt-2">
-                        Badges Earned
+                    Badges Earned
                     </p>
                 </div>
-                <div className="bg-white border rounded-3xl p-8 shadow-sm">
+
+                <div className="bg-white border rounded-3xl p-10 shadow-sm">
                     <p className="text-4xl font-bold text-green-700">
-                        {stats.kgCollected}kg
+                    {stats.kgCollected}kg
                     </p>
                     <p className="text-gray-600 mt-2">
-                        Waste Collected
+                    Waste Collected
                     </p>
                 </div>
-                <div className="bg-white border rounded-3xl p-8 shadow-sm">
+
+                <div className="bg-white border rounded-3xl p-10 shadow-sm">
                     <p className="text-4xl font-bold text-green-700">
-                        {stats.eventsHosted}
+                    {stats.eventsHosted}
                     </p>
                     <p className="text-gray-600 mt-2">
-                        Events Hosted
+                    Events Hosted
                     </p>
                 </div>
-            </div>
-        </main>
+
+                </div>
+            </section>
+            </main>
     )
 }
