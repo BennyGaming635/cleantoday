@@ -72,6 +72,14 @@ export default function Me() {
                         Badges Earned
                     </p>
                 </div>
+                <div className="bg-white border rounded-3xl p-8 shadow-sm">
+                    <p className="text-4xl font-bold text-green-700">
+                        {stats.kgCollected}kg
+                    </p>
+                    <p className="text-gray-600 mt-2">
+                        Waste Collected
+                    </p>
+                </div>
             </div>
         </main>
     )
