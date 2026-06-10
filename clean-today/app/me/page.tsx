@@ -148,7 +148,7 @@ export default function Me() {
                         return (
                         <Link
                             key={event.id}
-                            href={`/events/${event.id}`}
+                            href={`/event/${event.id}`}
                             className="flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-50 transition"
                         >
                             {/* Calendar */}
