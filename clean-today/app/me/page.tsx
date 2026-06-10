@@ -4,8 +4,15 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import Navbar from '@/components/navbar/Navbar'
 
+type UpcomingEvent = {
+    id: number
+    title: string
+    event_time: string
+}
+
 export default function Me() {
     const [username, setUsername] = useState('')
+    const [upcomingEvents, setUpcomingEvents] = useState<UpcomingEvent[]>([])
     const [stats, setStats] = useState({
         badges: 0,
         kgCollected: 0,
