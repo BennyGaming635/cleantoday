@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Navbar from '@/components/navbar/Navbar'
 import Footer from '@/components/footer/Footer'
+import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 
 type Event = {
