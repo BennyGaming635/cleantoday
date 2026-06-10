@@ -5,8 +5,10 @@ import Navbar from "@/components/navbar/Navbar"
 import { supabase } from "@/lib/supabase"
 import { Button } from "@heroui/react"
 import Link from "next/link"
+import { useRouter } from 'next/navigation'
 
 export default function HomePage() {
+    const router = useRouter()
     const [stats, setStats] = useState({
         totalEvents: 0,
         totalKg: 0,
@@ -14,6 +16,16 @@ export default function HomePage() {
     })
 
     useEffect(() => {
+        const checkAuth = async () => {
+            const {
+                data: { session },
+            } = await supabase.auth.getSession()
+
+            if (session) {
+                router.replace('/me')
+            }
+        }
+    checkAuth()
         const loadStats = async () => {
             const { data: events } = await supabase
                 .from('cleanup_events')
@@ -41,7 +53,7 @@ export default function HomePage() {
         }
 
         loadStats()
-    }, [])
+    }, [router])
 
     return (
         <main className="min-h-screen bg-white">

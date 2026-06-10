@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Navbar from '@/components/navbar/Navbar'
-import Footer from '@/components/footer/Footer'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 
@@ -70,17 +69,6 @@ export default function DashboardPage() {
   }
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession()
-
-      if (session) {
-        router.replace('/me')
-      }
-    }
-    checkAuth()
-
     ;(async () => {
       await loadEvents()
     })()
