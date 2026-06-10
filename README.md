@@ -15,6 +15,7 @@ In Clean Today, you are able to do many things, but the focus is again, on event
 - Achievements (I've spent too long fixing this..)
 - See your total collection versus others on a leaderboard!
 - Download a generated social card for posting on social media.
+- Welcome page showing everything you need to know instantly (for logged in users)
 
 For councils, they have access to the above features but can also:
 - See all events easily
