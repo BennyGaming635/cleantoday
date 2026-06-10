@@ -123,7 +123,7 @@ export default function Me() {
                 </div>
             </section>
             <section className="max-w-7xl mx-auto px-6 pb-24">
-                <div className="bg-white border rounded-3xl p-8 shadow-sm">
+                <div className="bg-white border rounded-3xl p-8 shadow-sm grid grid-cols-1 lg:grid-cols-2 gap-6">
 
                     <h2 className="text-3xl font-bold text-gray-900 mb-6">
                     Upcoming Events
@@ -151,20 +151,14 @@ export default function Me() {
                             href={`/event/${event.id}`}
                             className="flex items-center gap-4 p-3 rounded-2xl hover:bg-gray-50 transition"
                         >
-                            {/* Calendar */}
                             <div className="w-16 h-16 rounded-xl border overflow-hidden flex flex-col shrink-0">
-
                             <div className="bg-green-700 text-white text-xs font-bold text-center py-1 uppercase">
                                 {month}
                             </div>
-
                             <div className="flex-1 flex items-center justify-center text-xl font-bold text-gray-900">
                                 {day}
                             </div>
-
                             </div>
-
-                            {/* Event details */}
                             <div>
                             <p className="font-semibold text-gray-900">
                                 {event.title}
