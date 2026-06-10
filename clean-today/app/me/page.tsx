@@ -80,6 +80,14 @@ export default function Me() {
                         Waste Collected
                     </p>
                 </div>
+                <div className="bg-white border rounded-3xl p-8 shadow-sm">
+                    <p className="text-4xl font-bold text-green-700">
+                        {stats.eventsHosted}
+                    </p>
+                    <p className="text-gray-600 mt-2">
+                        Events Hosted
+                    </p>
+                </div>
             </div>
         </main>
     )
