@@ -30,6 +30,7 @@ export default function DashboardPage() {
   const [editLocation, setEditLocation] =
     useState('')
   const [editDate, setEditDate] = useState('')
+  const router = useRouter()
 
   const loadEvents = async () => {
     setLoading(true)
