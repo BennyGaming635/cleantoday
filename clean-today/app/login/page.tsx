@@ -68,7 +68,7 @@ export default function LoginPage() {
             </h1>
 
             <p className="text-gray-500 mt-1 text-center">
-              Sign in to create and join cleanup events
+              Create cleanups, track impact, and help improve your local community.
             </p>
 
             <button
