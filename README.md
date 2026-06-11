@@ -45,6 +45,9 @@ Well you little API nerd (no offence meant)... Look [here](API.md).
 ## What achievements can I earn?
 Uhh there's a lot of achievemnts, learn more [here](ACHIEVEMENTS.md).
 
+## What pages do what?
+Lucky I've wrote about that [here](ROUTES.md).
+
 ## Credits
 I think I should be crediting people here, but thank you to Figma (for the education plan xd) and Pexels for stock footage.
 
