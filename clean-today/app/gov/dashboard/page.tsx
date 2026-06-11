@@ -168,7 +168,7 @@ export default function GovDashboard() {
       <Navbar />
 
       <div className="max-w-7xl mx-auto px-6 py-16 space-y-10">
-        <div className="bg-white border-rounded-3xl p-10">
+        <div className="bg-white p-6 rounded-2xl border">
           <div className="flex items-center gap-6">
             {govUser?.logo_url && (
               <img
