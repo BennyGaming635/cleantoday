@@ -94,7 +94,7 @@ export default function Me() {
 
                 <div className="max-w-4xl">
                 <h1 className="text-4xl font-bold text-gray-900 leading-tight">
-                    Welcome back {username}!
+                    {greeting}
                 </h1>
 
                 <p className="text-xl text-gray-600 mt-4">
