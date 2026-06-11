@@ -209,6 +209,24 @@ export async function POST(req: Request) {
     })
   }
 
+  if (totalKg >= 250) {
+    awards.push({
+      user_id: userId,
+      achievement_key: '250kg_Hero',
+      earned_at: now.toISOString(),
+      desc: 'Collected 250kg of waste',
+    })
+  }
+
+  if (totalKg >= 500) {
+    awards.push({
+      user_id: userId,
+      achievement_key: '500kg_Hero',
+      earned_at: now.toISOString(),
+      desc: 'Collected 500kg of waste (congrats, you probably deserve a medal)',
+    })
+  }
+
   if (awards.length === 0) {
     return NextResponse.json({ message: 'No achievements earned' })
   }
