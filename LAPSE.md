@@ -6,5 +6,8 @@ Anyways they are listed below.
 - [02/06/26](https://lapse.hackclub.com/timelapse/dgOy_gTcjfTV) More figma stuff (making of badges)
 - [04/06/26](https://lapse.hackclub.com/timelapse/jlZfKED0OUOU) Making of month badges
 - [07/06/26](https://lapse.hackclub.com/timelapse/DQOjOh37DAZ3) More badges for more stuff!
+- [11/06/26](https://lapse.hackclub.com/timelapse/AFZaUMWPF22v) Made the badges for 250 and 500kg.
 
 Yes I've now noticed 100% of these are just figma stuff.
+
+But if you wanna see the badges made, have a look at [this](/ACHIEVEMENTS.md)
