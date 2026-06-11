@@ -168,10 +168,24 @@ export default function GovDashboard() {
       <Navbar />
 
       <div className="max-w-7xl mx-auto px-6 py-16 space-y-10">
-
-        <h1 className="text-4xl font-bold text-green-900">
-          {govUser?.council_name || ' Dashboard'}
-        </h1>
+        <div className="bg-white border-rounded-3xl p-10">
+          <div className="flex items-center gap-6">
+            {govUser?.logo_url && (
+              <img
+                src={govUser.logo_url}
+                className="w-20 h-20 rounded-2xl object-cover"
+              />
+            )}
+            <div>
+              <h1 className="text-5xl font-bold text-green-700">
+                {govUser?.council_name} Dashboard
+              </h1>
+              <p className="text-gray-600 mt-2">
+                Government Portal
+              </p>
+            </div>
+          </div>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
 
