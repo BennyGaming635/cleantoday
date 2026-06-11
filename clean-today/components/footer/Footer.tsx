@@ -95,6 +95,7 @@ export default function Footer() {
                             <Link href="/explore">Explore</Link>
                             <Link href="/status">Status</Link>
                             <Link href="/users">Users</Link>
+                            <Link href="/blog">Blog</Link>
                         </div>
                     </div>
                 </div>
