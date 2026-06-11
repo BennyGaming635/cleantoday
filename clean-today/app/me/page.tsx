@@ -35,6 +35,7 @@ export default function Me() {
     
     useEffect(() => {
         const load = async () => {
+            setGreeting(greetings[Math.floor(Math.random() * greetings.length)])
             const {
                 data: { user },
             } = await supabase.auth.getUser()
