@@ -178,7 +178,7 @@ export default function GovDashboard() {
             )}
             <div>
               <h1 className="text-5xl font-bold text-green-700">
-                {govUser?.council_name} Dashboard
+                {govUser?.council_name}
               </h1>
               <p className="text-gray-600 mt-2">
                 Government Portal
