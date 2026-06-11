@@ -94,7 +94,7 @@ export default function LoginPage() {
 
             <button
               onClick={signInWithGoogle}
-              className="w-full bg-white border py-3 rounded-xl"
+              className="w-full bg-white border py-3 rounded-xl text-gray-800"
             >
               Continue with Google
             </button>
