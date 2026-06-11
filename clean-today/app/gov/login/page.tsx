@@ -42,7 +42,7 @@ export default function GovLoginPage() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <img
-            src="/logo-c.png"
+            src="/brand/logo-c.png"
             alt="Clean Today"
             className="w-20 h-20 mx-auto mb-4"
           />
