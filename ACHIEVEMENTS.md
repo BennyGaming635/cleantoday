@@ -18,6 +18,8 @@ Clean Today has user achievements which are earnt via doing serveral different t
 | ![100kg Beachball Badge](/clean-today/public/achievements/100kg_Beachball.png) | 100kg Beachball | Collect a total of 100kg |
 | ![50kg Cleaner Badge](/clean-today/public/achievements/50kg_Cleaner.png) | 50kg Cleaner | Collect a total of 50kg |
 | ![10kg Club Badge](/clean-today/public/achievements/10kg_Club.png) | 10kg Club | Collect a total of 10kg |
+| ![250kg Hammer Badge](/clean-today/public/achievements/250kg_Hammer.png) | 250kg Hammer | Collect a total of 250kg |
+| ![500kg Hero Badge](/clean-today/public/achievements/500kg_Hero.png) | 500kg Hero | Collect a total of 500kg (wow congrats!) |
 
 ## How do I earn achievements?
 
