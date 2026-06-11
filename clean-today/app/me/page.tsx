@@ -13,6 +13,7 @@ type UpcomingEvent = {
 
 export default function Me() {
     const [username, setUsername] = useState('')
+    const [greeting, setGreeting] = useState('')
     const [upcomingEvents, setUpcomingEvents] = useState<UpcomingEvent[]>([])
     const [stats, setStats] = useState({
         badges: 0,
