@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import Navbar from '@/components/navbar/Navbar'
+import Link from 'next/link'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -100,7 +101,20 @@ export default function LoginPage() {
             </button>
 
             <p className="text-xs text-gray-400 text-center">
-              By continuing, you agree to Terms and Privacy Policy.
+              By continuing, you agree to our{' '}
+              <Link
+                href="/terms"
+                className="text-green-700 hover:underline"
+              >
+                Terms and Conditions
+              </Link>{' '}
+              and our{' '}
+              <Link
+                href="/privacy"
+                className="text-green-700 hover:underline"
+              >
+                Privacy Policy
+              </Link>.
             </p>
           </div>
         </div>
