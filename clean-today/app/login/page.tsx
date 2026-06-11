@@ -58,11 +58,16 @@ export default function LoginPage() {
       <div className="flex-1 flex items-center justify-center p-6">
         <div className="w-full max-w-md">
           <div className="bg-white shadow rounded-xl p-8 space-y-6">
-            <h1 className="text-3xl font-bold text-green-700">
+            <img
+              src="/brand/logo-c.png"
+              alt="Clean Today"
+              className="w-20 h-20 mx-auto mb-4"
+            />
+            <h1 className="text-3xl font-bold text-center text-green-700">
               Welcome Back
             </h1>
 
-            <p className="text-gray-500 mt-1">
+            <p className="text-gray-500 mt-1 text-center">
               Sign in to create and join cleanup events
             </p>
 
