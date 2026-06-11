@@ -19,6 +19,18 @@ export default function Me() {
         kgCollected: 0,
         eventsHosted: 0,
     })
+    const greetings = [
+        'Welcome back {username}!',
+        'Good to see you again {username}!',
+        'Hey {username}! Great to have you here.',
+        'Back already {username}?',
+        'Ready to make an impact {username}?',
+        'Another day, another cleanup with {username}!',
+        'Keep up the great work {username}!',
+        'Your community is lucky to have you {username}!',
+        'Let’s make today a great day for the planet, {username}!',
+        'Your impact so far is amazing, {username}!',
+    ]
     
     useEffect(() => {
         const load = async () => {
