@@ -87,7 +87,7 @@ export default function Me() {
     }, [])
 
     return (
-        <main className="min-h-screen bg-white">
+        <main className="min-h-screen bg-green-50">
             <Navbar />
 
             <section className="max-w-7xl mx-auto px-6 pt-24 pb-12">
