@@ -64,7 +64,7 @@ export default function LoginPage() {
               className="w-20 h-20 mx-auto mb-4"
             />
             <h1 className="text-3xl font-bold text-center text-green-700">
-              Welcome Back
+              Join Clean Today
             </h1>
 
             <p className="text-gray-500 mt-1 text-center">
