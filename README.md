@@ -23,7 +23,7 @@ For councils, they have access to the above features but can also:
 - Declare zones for attention
 
 ## Images
-Cool stuff here :P
+This is just some of the features avaliable in Clean Today, I recommend having a check at all the features today (you might even get an exclusive badge!).
 
 ![NEW Home page of Clean Today](/img/home.png)
 
