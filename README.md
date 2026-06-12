@@ -26,12 +26,19 @@ For councils, they have access to the above features but can also:
 This is just some of the features avaliable in Clean Today, I recommend having a check at all the features today (you might even get an exclusive badge!).
 
 ![NEW Home page of Clean Today](/img/home.png)
+Our brand new home page displays some community impact stats and also I think the hero looks rly cool tbh.
+
+![NEW welcome back page](/img/welcomeback.png)
+Already logged in users are greeted to this page if they had already logged in before, showing stuff they have done, and what's important to them plus a new welcome back message every time you log back in.
 
 ![Event page for events](/img/event.png)
+This page is just what everyone sees when you visit and event page, it does change the info on it per event you look at too.
 
 ![Profile page for users](/img/profile.png)
+A user page looks like this (public only), which shows your badges, and stats.
 
 ![Social cards avaliable for social media posts](/img/socialcard.png)
+This social card can easily be sent out to people in the community, which makes sharing much easier!
 
 ## How can I submit changes?
 Well make a branch, make your changes, a PR showing it works and I'll consider merging it (yes very simple I know).
